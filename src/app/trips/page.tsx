@@ -1,9 +1,14 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
-import { trips, vehicles } from "@/db/schema";
+import { trips } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
+
+function formatDate(dateStr: string) {
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" });
+}
 
 export default async function TripsPage() {
   const session = await auth();
@@ -12,8 +17,6 @@ export default async function TripsPage() {
   const userTrips = await db.select().from(trips)
     .where(eq(trips.userId, session.user.id))
     .orderBy(trips.date);
-  const userVehicles = await db.select().from(vehicles).where(eq(vehicles.userId, session.user.id));
-  const vehicleMap = new Map(userVehicles.map(v => [v.id, `${v.make} ${v.model}`]));
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -33,15 +36,15 @@ export default async function TripsPage() {
               href={`/trips/${t.id}`}
               className="block p-4 border border-line rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 bg-card"
             >
-              <div className="flex justify-between items-start">
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium text-fg truncate">{t.startLocation} → {t.endLocation}</p>
-                  <p className="text-sm text-fg-secondary mt-0.5">{t.date} · {t.totalKm} km · {vehicleMap.get(t.vehicleId) || "Unknown"} · {t.purpose}</p>
-                </div>
-                <span className={`text-xs font-medium px-2.5 py-1 rounded-full ml-3 whitespace-nowrap ${t.isBusiness ? "bg-success/10 text-success" : "bg-fg-muted/10 text-fg-secondary"}`}>
-                  {t.isBusiness ? "Business" : "Private"}
-                </span>
+              <div className="flex justify-between items-start mb-1.5">
+                <span className="text-sm text-fg-secondary">Date: {formatDate(t.date)}</span>
+                <span className="text-sm font-semibold text-fg-secondary whitespace-nowrap">{t.totalKm}KM</span>
               </div>
+              <p className="text-sm text-fg"><span className="text-fg-secondary">Start:</span> {t.startLocation}</p>
+              <p className="text-sm text-fg"><span className="text-fg-secondary">End:</span> {t.endLocation}</p>
+              {t.isBusiness && (
+                <p className="text-sm text-fg mt-1"><span className="text-fg-secondary">Business:</span> {t.purpose}</p>
+              )}
             </Link>
           ))}
         </div>

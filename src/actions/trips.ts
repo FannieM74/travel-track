@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { trips } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { computeTaxYear } from "@/lib/tax-year";
 
 export async function createTrip(formData: FormData) {
@@ -36,6 +37,7 @@ export async function createTrip(formData: FormData) {
 
   revalidatePath("/trips");
   revalidatePath("/dashboard");
+  redirect("/trips");
 }
 
 export async function updateTrip(id: string, formData: FormData) {

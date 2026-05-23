@@ -7,6 +7,12 @@ interface Trip {
   endLocation: string;
   totalKm: number;
   purpose: string;
+  isBusiness: boolean;
+}
+
+function formatDate(dateStr: string) {
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" });
 }
 
 export function RecentTrips({ trips }: { trips: Trip[] }) {
@@ -21,13 +27,15 @@ export function RecentTrips({ trips }: { trips: Trip[] }) {
           href={`/trips/${trip.id}`}
           className="block p-4 border border-line rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 bg-card"
         >
-          <div className="flex justify-between items-start">
-            <div className="min-w-0 flex-1">
-              <p className="font-medium text-fg truncate">{trip.startLocation} → {trip.endLocation}</p>
-              <p className="text-sm text-fg-secondary mt-0.5">{trip.date} — {trip.purpose}</p>
-            </div>
-            <span className="text-sm font-semibold text-fg-secondary ml-3 whitespace-nowrap">{trip.totalKm} km</span>
+          <div className="flex justify-between items-start mb-1">
+            <span className="text-sm text-fg-secondary">{formatDate(trip.date)}</span>
+            <span className="text-sm font-semibold text-fg-secondary whitespace-nowrap">{trip.totalKm} km</span>
           </div>
+          <p className="text-sm text-fg"><span className="text-fg-secondary">Start:</span> {trip.startLocation}</p>
+          <p className="text-sm text-fg"><span className="text-fg-secondary">End:</span> {trip.endLocation}</p>
+          {trip.isBusiness && (
+            <p className="text-sm text-fg mt-0.5"><span className="text-fg-secondary">Business:</span> {trip.purpose}</p>
+          )}
         </Link>
       ))}
     </div>
