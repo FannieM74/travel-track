@@ -39,8 +39,7 @@ yarn-error.log*
 # superpowers brainstorming artifacts
 .superpowers/
 
-# drizzle
-drizzle/
+
 
 # typescript
 *.tsbuildinfo
