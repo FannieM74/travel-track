@@ -108,25 +108,23 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
         <MapPicker onRouteChange={handleRouteChange} endPointFromSearch={endPointFromSearch} />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="text-sm font-medium mb-1">Start Location</label>
-          <input name="startLocation" required value={startLocation}
-            onChange={e => setStartLocation(e.target.value)}
-            className="w-full border rounded px-3 py-2" placeholder="Start address" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">End Location</label>
-          <AddressSearch
-            value={endLocation}
-            onChange={setEndLocation}
-            onSelect={(result) => {
-              setEndPointFromSearch({ lat: result.lat, lon: result.lon, displayName: result.displayName });
-            }}
-            placeholder="Search street address..."
-          />
-          <input name="endLocation" type="hidden" value={endLocation} />
-        </div>
+      <div>
+        <label className="text-sm font-medium mb-1">Start Location</label>
+        <input name="startLocation" required value={startLocation}
+          onChange={e => setStartLocation(e.target.value)}
+          className="w-full border rounded px-3 py-2" placeholder="Start address" />
+      </div>
+      <div>
+        <label className="block text-sm font-medium mb-1">End Location</label>
+        <AddressSearch
+          value={endLocation}
+          onChange={setEndLocation}
+          onSelect={(result) => {
+            setEndPointFromSearch({ lat: result.lat, lon: result.lon, displayName: result.displayName });
+          }}
+          placeholder="Search street address..."
+        />
+        <input name="endLocation" type="hidden" value={endLocation} />
       </div>
 
       <div>
