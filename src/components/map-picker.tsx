@@ -11,9 +11,10 @@ interface MapPickerProps {
     endName: string,
   ) => void;
   endPointFromSearch: { lat: number; lon: number; displayName: string } | null;
+  onStartLocated?: (name: string) => void;
 }
 
-export function MapPicker({ onRouteChange, endPointFromSearch }: MapPickerProps) {
+export function MapPicker({ onRouteChange, endPointFromSearch, onStartLocated }: MapPickerProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
   const markers = useRef<any[]>([]);
@@ -26,8 +27,6 @@ export function MapPicker({ onRouteChange, endPointFromSearch }: MapPickerProps)
   const prevSearchKeyRef = useRef<string | null>(null);
   const [startPoint, setStartPoint] = useState<{ lat: number; lon: number } | null>(null);
   const [endPoint, setEndPoint] = useState<{ lat: number; lon: number } | null>(null);
-  const [startName, setStartName] = useState("");
-  const [endName, setEndName] = useState("");
   const [showAccept, setShowAccept] = useState(false);
   const [distanceKm, setDistanceKm] = useState(0);
   const [routeAccepted, setRouteAccepted] = useState(false);
@@ -63,16 +62,12 @@ export function MapPicker({ onRouteChange, endPointFromSearch }: MapPickerProps)
 
           const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
           const data = await res.json();
-          startNameRef.current = data.name;
-          setStartName(data.name);
+          startNameRef.current = data.displayName;
+          onStartLocated?.(data.displayName);
         } else if (!endRef.current) {
           const marker = L.marker([lat, lon]).addTo(map).bindPopup("End");
           markers.current.push(marker);
-          if (startRef.current) {
-            map.fitBounds(L.latLngBounds([startRef.current!.lat, startRef.current!.lon], [lat, lon]), { padding: [50, 50] });
-          } else {
-            map.setView([lat, lon], 15);
-          }
+          map.fitBounds(L.latLngBounds([startRef.current.lat, startRef.current.lon], [lat, lon]), { padding: [50, 50] });
 
           const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
           const data = await res.json();
@@ -80,7 +75,6 @@ export function MapPicker({ onRouteChange, endPointFromSearch }: MapPickerProps)
           endRef.current = { lat, lon };
           endNameRef.current = data.name;
           setEndPoint({ lat, lon });
-          setEndName(data.name);
           setShowAccept(false);
           setRouteAccepted(false);
         }
@@ -103,7 +97,7 @@ export function MapPicker({ onRouteChange, endPointFromSearch }: MapPickerProps)
             startRef.current = { lat, lon };
             startNameRef.current = data.displayName;
             setStartPoint({ lat, lon });
-            setStartName(data.name);
+            onStartLocated?.(data.displayName);
           },
           () => {},
           { enableHighAccuracy: true, timeout: 10000 },
@@ -140,16 +134,11 @@ export function MapPicker({ onRouteChange, endPointFromSearch }: MapPickerProps)
 
       const marker = L.marker([lat, lon]).addTo(mapInstance.current).bindPopup("End");
       markers.current.push(marker);
-      if (startRef.current) {
-        mapInstance.current.fitBounds(L.latLngBounds([startRef.current!.lat, startRef.current!.lon], [lat, lon]), { padding: [50, 50] });
-      } else {
-        mapInstance.current.setView([lat, lon], 15);
-      }
+      mapInstance.current.fitBounds(L.latLngBounds([startRef.current!.lat, startRef.current!.lon], [lat, lon]), { padding: [50, 50] });
 
       endRef.current = { lat, lon };
       endNameRef.current = displayName;
       setEndPoint({ lat, lon });
-      setEndName(displayName);
       setShowAccept(false);
       setRouteAccepted(false);
     }
@@ -205,8 +194,6 @@ export function MapPicker({ onRouteChange, endPointFromSearch }: MapPickerProps)
     prevSearchKeyRef.current = null;
     setStartPoint(null);
     setEndPoint(null);
-    setStartName("");
-    setEndName("");
     setShowAccept(false);
     setRouteAccepted(false);
     setDistanceKm(0);
@@ -215,15 +202,6 @@ export function MapPicker({ onRouteChange, endPointFromSearch }: MapPickerProps)
   return (
     <div className="space-y-2">
       <div ref={mapRef} className="h-80 w-full rounded-lg border" />
-      <div className="flex items-center justify-between text-sm text-gray-500">
-        <div className="flex gap-4">
-          <span>{startName || (startPoint ? "Looking up address..." : "Set start")}</span>
-          <span>{endName || (endPoint ? "Looking up address..." : "Set end")}</span>
-        </div>
-        <button type="button" onClick={resetMap} className="text-blue-600 hover:underline text-xs">
-          Reset
-        </button>
-      </div>
       {showAccept && distanceKm > 0 && !routeAccepted && (
         <button
           type="button"
