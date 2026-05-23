@@ -60,20 +60,29 @@ export function MapPicker({ onRouteChange, endPointFromSearch, onStartLocated }:
           markers.current.push(marker);
           map.setView([lat, lon], 15);
 
-          const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
-          const data = await res.json();
-          startNameRef.current = data.displayName;
-          onStartLocated?.(data.displayName);
+          try {
+            const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
+            const data = await res.json();
+            startNameRef.current = data.displayName || `${lat}, ${lon}`;
+            onStartLocated?.(data.displayName || `${lat}, ${lon}`);
+          } catch {
+            startNameRef.current = `${lat}, ${lon}`;
+            onStartLocated?.(`${lat}, ${lon}`);
+          }
         } else if (!endRef.current) {
           const marker = L.marker([lat, lon]).addTo(map).bindPopup("End");
           markers.current.push(marker);
           map.fitBounds(L.latLngBounds([startRef.current.lat, startRef.current.lon], [lat, lon]), { padding: [50, 50] });
 
-          const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
-          const data = await res.json();
+          try {
+            const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
+            const data = await res.json();
+            endNameRef.current = data.displayName || `${lat}, ${lon}`;
+          } catch {
+            endNameRef.current = `${lat}, ${lon}`;
+          }
 
           endRef.current = { lat, lon };
-          endNameRef.current = data.displayName;
           setEndPoint({ lat, lon });
           setShowAccept(false);
           setRouteAccepted(false);
@@ -91,13 +100,18 @@ export function MapPicker({ onRouteChange, endPointFromSearch, onStartLocated }:
             const marker = L.marker([lat, lon]).addTo(map).bindPopup("You are here");
             markers.current.push(marker);
 
-            const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}&snap=true`);
-            const data = await res.json();
+            try {
+              const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}&snap=true`);
+              const data = await res.json();
+              startNameRef.current = data.displayName || `${lat}, ${lon}`;
+              onStartLocated?.(data.displayName || `${lat}, ${lon}`);
+            } catch {
+              startNameRef.current = `${lat}, ${lon}`;
+              onStartLocated?.(`${lat}, ${lon}`);
+            }
 
             startRef.current = { lat, lon };
-            startNameRef.current = data.displayName;
             setStartPoint({ lat, lon });
-            onStartLocated?.(data.displayName);
           },
           () => {},
           { enableHighAccuracy: true, timeout: 10000 },
