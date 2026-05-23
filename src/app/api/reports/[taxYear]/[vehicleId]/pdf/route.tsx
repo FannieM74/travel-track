@@ -62,9 +62,8 @@ export async function GET(
     />
   );
 
-  return new Response(pdf, {
+  return new Response(new Blob([new Uint8Array(pdf)], { type: "application/pdf" }), {
     headers: {
-      "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename="logbook-${taxYear}-${vehicle.licensePlate || vehicle.id}.pdf"`,
     },
   });
