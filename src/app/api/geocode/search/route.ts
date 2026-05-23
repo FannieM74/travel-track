@@ -8,7 +8,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Missing query" }, { status: 400 });
   }
 
-  const nominatimUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`;
+  const nominatimUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=5&addressdetails=1`;
   const res = await fetch(nominatimUrl, {
     headers: { "User-Agent": "TravelTrack/1.0 (travel-track-app)" },
   });
@@ -18,10 +18,11 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Location not found" }, { status: 404 });
   }
 
-  const result = data[0];
-  return NextResponse.json({
-    lat: parseFloat(result.lat),
-    lon: parseFloat(result.lon),
-    displayName: result.display_name,
-  });
+  const results = data.map((item: any) => ({
+    lat: parseFloat(item.lat),
+    lon: parseFloat(item.lon),
+    displayName: item.display_name,
+  }));
+
+  return NextResponse.json({ results });
 }

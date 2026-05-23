@@ -16,12 +16,24 @@ export async function GET(req: Request) {
   const data = await res.json();
 
   if (!data || data.error) {
-    return NextResponse.json({ name: `${lat}, ${lon}` });
+    return NextResponse.json({ name: `${lat}, ${lon}`, displayName: `${lat}, ${lon}`, suburb: null, city: null });
   }
 
   const addr = data.address || {};
-  const name = addr.suburb || addr.city_district || addr.city || addr.town || addr.village || addr.county || addr.state || `${lat}, ${lon}`;
-  const fullName = [addr.suburb, addr.city || addr.town || addr.village].filter(Boolean).join(", ") || name;
 
-  return NextResponse.json({ name: fullName });
+  function isWard(v: string | undefined) {
+    return v ? /ward|municipality/i.test(v) : false;
+  }
+
+  const suburb = !isWard(addr.suburb) ? addr.suburb : null;
+  const neighbourhood = !isWard(addr.neighbourhood) ? addr.neighbourhood : null;
+  const city = addr.city || addr.town || addr.village || "";
+  const shortName = neighbourhood || suburb || addr.city_district || city || addr.county || addr.state || `${lat}, ${lon}`;
+
+  return NextResponse.json({
+    name: shortName,
+    displayName: data.display_name || `${lat}, ${lon}`,
+    suburb: suburb || null,
+    city: city || null,
+  });
 }

@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from "react";
 import { createTrip, updateTrip } from "@/actions/trips";
 import { getLastOdometer } from "@/actions/odometer";
 import { MapPicker } from "./map-picker";
+import { AddressSearch } from "./address-search";
 
 interface Vehicle {
   id: string;
@@ -31,7 +32,7 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
   const [startLocation, setStartLocation] = useState(trip?.startLocation ?? "");
   const [endLocation, setEndLocation] = useState(trip?.endLocation ?? "");
   const [loading, setLoading] = useState(false);
-  const [calcLoading, setCalcLoading] = useState(false);
+  const [endPointFromSearch, setEndPointFromSearch] = useState<{ lat: number; lon: number; displayName: string } | null>(null);
   const startOdoRef = useRef(startOdometer);
   startOdoRef.current = startOdometer;
 
@@ -67,34 +68,6 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
     },
     [],
   );
-
-  async function handleCalculateDistance() {
-    if (!startLocation.trim() || !endLocation.trim()) return;
-    setCalcLoading(true);
-    try {
-      const [startRes, endRes] = await Promise.all([
-        fetch(`/api/geocode/search?q=${encodeURIComponent(startLocation)}`),
-        fetch(`/api/geocode/search?q=${encodeURIComponent(endLocation)}`),
-      ]);
-      if (!startRes.ok || !endRes.ok) return;
-      const startData = await startRes.json();
-      const endData = await endRes.json();
-
-      const osrmRes = await fetch(
-        `/api/osrm/route?startLon=${startData.lon}&startLat=${startData.lat}&endLon=${endData.lon}&endLat=${endData.lat}`
-      );
-      const osrmData = await osrmRes.json();
-      if (osrmData.code === "Ok" && osrmData.routes?.[0]) {
-        const distanceKm = Math.round(osrmData.routes[0].distance / 1000);
-        const odo = startOdoRef.current;
-        if (odo) {
-          setEndOdometer((parseInt(odo) + distanceKm).toString());
-        }
-      }
-    } finally {
-      setCalcLoading(false);
-    }
-  }
 
   return (
     <form action={trip ? updateTrip.bind(null, trip.id) : createTrip} className="space-y-4">
@@ -132,7 +105,7 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
 
       <div className="border rounded-lg p-4 bg-gray-50">
         <label className="block text-sm font-medium mb-2">Pin on Map</label>
-        <MapPicker onRouteChange={handleRouteChange} />
+        <MapPicker onRouteChange={handleRouteChange} endPointFromSearch={endPointFromSearch} />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -140,26 +113,21 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
           <label className="text-sm font-medium mb-1">Start Location</label>
           <input name="startLocation" required value={startLocation}
             onChange={e => setStartLocation(e.target.value)}
-            className="w-full border rounded px-3 py-2" placeholder="Suburb or address" />
+            className="w-full border rounded px-3 py-2" placeholder="Start address" />
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">End Location</label>
-          <input name="endLocation" required value={endLocation}
-            onChange={e => setEndLocation(e.target.value)}
-            className="w-full border rounded px-3 py-2" placeholder="Suburb or address" />
+          <AddressSearch
+            value={endLocation}
+            onChange={setEndLocation}
+            onSelect={(result) => {
+              setEndPointFromSearch({ lat: result.lat, lon: result.lon, displayName: result.displayName });
+            }}
+            placeholder="Search destination address..."
+          />
+          <input name="endLocation" type="hidden" value={endLocation} />
         </div>
       </div>
-
-      {startLocation && endLocation && !trip && (
-        <button
-          type="button"
-          onClick={handleCalculateDistance}
-          disabled={calcLoading}
-          className="w-full border border-blue-300 text-blue-700 rounded py-2 hover:bg-blue-50 disabled:opacity-50"
-        >
-          {calcLoading ? "Calculating..." : "Calculate Distance"}
-        </button>
-      )}
 
       <div>
         <label className="block text-sm font-medium mb-1">Purpose of Trip</label>

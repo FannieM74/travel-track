@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface MapPickerProps {
   onRouteChange: (
@@ -10,9 +10,10 @@ interface MapPickerProps {
     startName: string,
     endName: string,
   ) => void;
+  endPointFromSearch: { lat: number; lon: number; displayName: string } | null;
 }
 
-export function MapPicker({ onRouteChange }: MapPickerProps) {
+export function MapPicker({ onRouteChange, endPointFromSearch }: MapPickerProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
   const markers = useRef<any[]>([]);
@@ -21,10 +22,15 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
   const endRef = useRef<{ lat: number; lon: number } | null>(null);
   const startNameRef = useRef("");
   const endNameRef = useRef("");
+  const routeDistanceRef = useRef(0);
+  const prevSearchKeyRef = useRef<string | null>(null);
   const [startPoint, setStartPoint] = useState<{ lat: number; lon: number } | null>(null);
   const [endPoint, setEndPoint] = useState<{ lat: number; lon: number } | null>(null);
   const [startName, setStartName] = useState("");
   const [endName, setEndName] = useState("");
+  const [showAccept, setShowAccept] = useState(false);
+  const [distanceKm, setDistanceKm] = useState(0);
+  const [routeAccepted, setRouteAccepted] = useState(false);
 
   useEffect(() => {
     if (!mapRef.current || mapInstance.current) return;
@@ -50,6 +56,7 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
         if (!startRef.current) {
           startRef.current = { lat, lon };
           setStartPoint({ lat, lon });
+          setRouteAccepted(false);
           const marker = L.marker([lat, lon]).addTo(map).bindPopup("Start");
           markers.current.push(marker);
           map.setView([lat, lon], 15);
@@ -59,16 +66,19 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
           startNameRef.current = data.name;
           setStartName(data.name);
         } else if (!endRef.current) {
-          endRef.current = { lat, lon };
-          setEndPoint({ lat, lon });
           const marker = L.marker([lat, lon]).addTo(map).bindPopup("End");
           markers.current.push(marker);
           map.setView([lat, lon], 15);
 
           const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
           const data = await res.json();
+
+          endRef.current = { lat, lon };
           endNameRef.current = data.name;
+          setEndPoint({ lat, lon });
           setEndName(data.name);
+          setShowAccept(false);
+          setRouteAccepted(false);
         }
       });
 
@@ -85,12 +95,11 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
 
             const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
             const data = await res.json();
-            const name = data.name;
 
             startRef.current = { lat, lon };
-            startNameRef.current = name;
+            startNameRef.current = data.displayName;
             setStartPoint({ lat, lon });
-            setStartName(name);
+            setStartName(data.name);
           },
           () => {},
           { enableHighAccuracy: true, timeout: 10000 },
@@ -108,25 +117,73 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
     };
   }, []);
 
-  const handleRouteChange = useCallback(onRouteChange, [onRouteChange]);
+  useEffect(() => {
+    const point = endPointFromSearch;
+    if (!point || !mapInstance.current) return;
+    const key = `${point.lat}-${point.lon}`;
+    if (key === prevSearchKeyRef.current) return;
+    prevSearchKeyRef.current = key;
+
+    async function placeEndMarker() {
+      if (!point) return;
+      const L = (await import("leaflet")).default;
+      const { lat, lon, displayName } = point;
+
+      if (markers.current.length > 1) {
+        markers.current[1].remove();
+        markers.current = [markers.current[0]];
+      }
+
+      const marker = L.marker([lat, lon]).addTo(mapInstance.current).bindPopup("End");
+      markers.current.push(marker);
+      mapInstance.current.setView([lat, lon], 15);
+
+      endRef.current = { lat, lon };
+      endNameRef.current = displayName;
+      setEndPoint({ lat, lon });
+      setEndName(displayName);
+      setShowAccept(false);
+      setRouteAccepted(false);
+    }
+    placeEndMarker();
+  }, [endPointFromSearch]);
 
   useEffect(() => {
-    if (startPoint && endPoint) {
-      fetch(`/api/osrm/route?startLon=${startPoint.lon}&startLat=${startPoint.lat}&endLon=${endPoint.lon}&endLat=${endPoint.lat}`)
-        .then((r) => r.json())
-        .then(async (data) => {
-          if (data.code === "Ok" && data.routes?.[0] && mapInstance.current) {
-            const L = (await import("leaflet")).default;
-            const route = data.routes[0];
-            const coords = route.geometry.coordinates.map((c: number[]) => [c[1], c[0]] as [number, number]);
-            if (routeLayer.current) routeLayer.current.remove();
-            routeLayer.current = L.polyline(coords, { color: "blue", weight: 3 }).addTo(mapInstance.current);
-            const distanceKm = Math.round(route.distance / 1000);
-            handleRouteChange(startPoint, endPoint, distanceKm, startNameRef.current, endNameRef.current);
-          }
-        });
+    if (!startPoint || !endPoint) return;
+    setShowAccept(false);
+
+    fetch(
+      `/api/osrm/route?startLon=${startPoint.lon}&startLat=${startPoint.lat}&endLon=${endPoint.lon}&endLat=${endPoint.lat}`
+    )
+      .then((r) => r.json())
+      .then(async (data) => {
+        if (data.code === "Ok" && data.routes?.[0] && mapInstance.current) {
+          const L = (await import("leaflet")).default;
+          const route = data.routes[0];
+          const coords = route.geometry.coordinates.map((c: number[]) => [c[1], c[0]] as [number, number]);
+          if (routeLayer.current) routeLayer.current.remove();
+          routeLayer.current = L.polyline(coords, { color: "blue", weight: 3 }).addTo(mapInstance.current);
+          const distKm = Math.round(route.distance / 1000);
+          routeDistanceRef.current = distKm;
+          setDistanceKm(distKm);
+          setShowAccept(true);
+        }
+      });
+  }, [startPoint, endPoint]);
+
+  function handleAccept() {
+    if (startRef.current && endRef.current) {
+      onRouteChange(
+        startRef.current,
+        endRef.current,
+        routeDistanceRef.current,
+        startNameRef.current,
+        endNameRef.current,
+      );
+      setRouteAccepted(true);
+      setShowAccept(false);
     }
-  }, [startPoint, endPoint, handleRouteChange]);
+  }
 
   function resetMap() {
     markers.current.forEach((m: any) => m.remove());
@@ -136,10 +193,15 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
     endRef.current = null;
     startNameRef.current = "";
     endNameRef.current = "";
+    routeDistanceRef.current = 0;
+    prevSearchKeyRef.current = null;
     setStartPoint(null);
     setEndPoint(null);
     setStartName("");
     setEndName("");
+    setShowAccept(false);
+    setRouteAccepted(false);
+    setDistanceKm(0);
   }
 
   return (
@@ -147,13 +209,22 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
       <div ref={mapRef} className="h-80 w-full rounded-lg border" />
       <div className="flex items-center justify-between text-sm text-gray-500">
         <div className="flex gap-4">
-          <span>{startName || (startPoint ? "Looking up address..." : "Click map to set start")}</span>
-          <span>{endName || (endPoint ? "Looking up address..." : "Click map to set end")}</span>
+          <span>{startName || (startPoint ? "Looking up address..." : "Set start")}</span>
+          <span>{endName || (endPoint ? "Looking up address..." : "Set end")}</span>
         </div>
-        <button type="button" onClick={resetMap} className="text-blue-600 hover:underline">
+        <button type="button" onClick={resetMap} className="text-blue-600 hover:underline text-xs">
           Reset
         </button>
       </div>
+      {showAccept && distanceKm > 0 && !routeAccepted && (
+        <button
+          type="button"
+          onClick={handleAccept}
+          className="w-full bg-green-600 text-white rounded py-2 hover:bg-green-700 font-medium"
+        >
+          Accept Route — {distanceKm} km
+        </button>
+      )}
     </div>
   );
 }
