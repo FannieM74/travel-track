@@ -5,6 +5,7 @@ import { trips, vehicles } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { deleteTrip } from "@/actions/trips";
 import { TripForm } from "@/components/trip-form";
+import Link from "next/link";
 
 export default async function TripDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
@@ -20,7 +21,8 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="max-w-lg mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6 text-fg">Edit Trip</h1>
+      <Link href="/trips" className="text-sm text-fg-secondary hover:underline">&larr; Back to trips</Link>
+      <h1 className="text-2xl font-bold mt-3 mb-6 text-fg">Edit Trip</h1>
       <TripForm vehicles={userVehicles} trip={trip} />
 
       <form action={deleteTrip.bind(null, id)} className="mt-4">

@@ -37,7 +37,7 @@ export async function createTrip(formData: FormData) {
 
   revalidatePath("/trips");
   revalidatePath("/dashboard");
-  redirect("/trips");
+  redirect("/trips?success=Trip+logged+successfully");
 }
 
 export async function updateTrip(id: string, formData: FormData) {
@@ -68,6 +68,7 @@ export async function updateTrip(id: string, formData: FormData) {
 
   revalidatePath("/trips");
   revalidatePath("/dashboard");
+  redirect("/trips?success=Trip+updated+successfully");
 }
 
 export async function deleteTrip(id: string) {
@@ -78,4 +79,5 @@ export async function deleteTrip(id: string) {
 
   revalidatePath("/trips");
   revalidatePath("/dashboard");
+  redirect("/trips?success=Trip+deleted");
 }

@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { vehicles, vehicleOdometerReadings } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function createVehicle(formData: FormData) {
   const session = await auth();
@@ -25,6 +26,7 @@ export async function createVehicle(formData: FormData) {
 
   revalidatePath("/vehicles");
   revalidatePath("/dashboard");
+  redirect("/vehicles?success=Vehicle+added+successfully");
 }
 
 export async function updateVehicle(id: string, formData: FormData) {
@@ -41,6 +43,7 @@ export async function updateVehicle(id: string, formData: FormData) {
   );
 
   revalidatePath("/vehicles");
+  redirect("/vehicles?success=Vehicle+updated+successfully");
 }
 
 export async function deleteVehicle(id: string) {
@@ -53,6 +56,7 @@ export async function deleteVehicle(id: string) {
 
   revalidatePath("/vehicles");
   revalidatePath("/dashboard");
+  redirect("/vehicles?success=Vehicle+deleted");
 }
 
 export async function setOpeningOdometer(vehicleId: string, formData: FormData) {
@@ -74,6 +78,7 @@ export async function setOpeningOdometer(vehicleId: string, formData: FormData) 
   }
 
   revalidatePath("/vehicles");
+  redirect(`/vehicles/${vehicleId}?success=Opening+odometer+saved`);
 }
 
 export async function setClosingOdometer(vehicleId: string, formData: FormData) {
@@ -95,4 +100,5 @@ export async function setClosingOdometer(vehicleId: string, formData: FormData) 
   }
 
   revalidatePath("/vehicles");
+  redirect(`/vehicles/${vehicleId}?success=Closing+odometer+saved`);
 }

@@ -1,6 +1,7 @@
 import { createVehicle } from "@/actions/vehicles";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function NewVehiclePage() {
   const session = await auth();
@@ -8,7 +9,8 @@ export default async function NewVehiclePage() {
 
   return (
     <div className="max-w-lg mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6 text-fg">Add Vehicle</h1>
+      <Link href="/vehicles" className="text-sm text-fg-secondary hover:underline">&larr; Back to vehicles</Link>
+      <h1 className="text-2xl font-bold mt-3 mb-6 text-fg">Add Vehicle</h1>
       <form action={createVehicle} className="space-y-4">
         <div>
           <label className="block text-sm font-medium mb-1 text-fg">Make</label>

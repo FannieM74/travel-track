@@ -6,6 +6,7 @@ import { eq, and } from "drizzle-orm";
 import { getCurrentTaxYear } from "@/lib/tax-year";
 import { updateVehicle, deleteVehicle, setOpeningOdometer, setClosingOdometer } from "@/actions/vehicles";
 import Link from "next/link";
+import { FlashMessage } from "@/components/flash-message";
 
 export default async function VehicleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
@@ -24,6 +25,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="max-w-lg mx-auto p-6">
+      <FlashMessage />
       <h1 className="text-2xl font-bold mb-2 text-fg">{vehicle.make} {vehicle.model}</h1>
       <p className="text-fg-secondary mb-6">{vehicle.licensePlate || "No plate"} · {vehicle.year}</p>
 

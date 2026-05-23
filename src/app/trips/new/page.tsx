@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { vehicles } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { TripForm } from "@/components/trip-form";
+import Link from "next/link";
 
 export default async function NewTripPage() {
   const session = await auth();
@@ -14,7 +15,8 @@ export default async function NewTripPage() {
 
   return (
     <div className="max-w-lg mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6 text-fg">Log a Trip</h1>
+      <Link href="/trips" className="text-sm text-fg-secondary hover:underline">&larr; Back to trips</Link>
+      <h1 className="text-2xl font-bold mt-3 mb-6 text-fg">Log a Trip</h1>
       <TripForm vehicles={userVehicles} />
     </div>
   );

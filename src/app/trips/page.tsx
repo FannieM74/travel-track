@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { trips } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
+import { FlashMessage } from "@/components/flash-message";
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr + "T00:00:00");
@@ -21,7 +22,8 @@ export default async function TripsPage() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-fg">Trips</h1>
+        <FlashMessage />
+      <h1 className="text-2xl font-bold text-fg">Trips</h1>
         <Link href="/trips/new" className="bg-accent text-on-accent px-4 py-2 rounded-lg hover:bg-accent-light transition-colors font-medium">
           + Log Trip
         </Link>
