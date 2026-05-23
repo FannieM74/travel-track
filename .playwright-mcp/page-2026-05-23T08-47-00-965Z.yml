@@ -1,0 +1,50 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link "TravelTrack" [ref=e3] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e5]:
+      - link "Dashboard" [ref=e6] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Trips" [ref=e7] [cursor=pointer]:
+        - /url: /trips
+      - link "Vehicles" [ref=e8] [cursor=pointer]:
+        - /url: /vehicles
+      - link "Reports" [ref=e9] [cursor=pointer]:
+        - /url: /reports
+      - generic [ref=e10]: demo@test.com
+      - link "Sign out" [ref=e11] [cursor=pointer]:
+        - /url: /api/auth/signout
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - heading "Dashboard" [level=1] [ref=e15]
+        - link "+ Log Trip" [ref=e16] [cursor=pointer]:
+          - /url: /trips/new
+      - paragraph [ref=e17]: "Tax Year: 2026/2027"
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - paragraph [ref=e20]: Total Kilometres
+          - paragraph [ref=e21]: "0"
+        - generic [ref=e22]:
+          - paragraph [ref=e23]: Business Kilometres
+          - paragraph [ref=e24]: "0"
+        - generic [ref=e25]:
+          - paragraph [ref=e26]: Business Use
+          - paragraph [ref=e27]: 0.0%
+        - generic [ref=e28]:
+          - paragraph [ref=e29]: Trips Logged
+          - paragraph [ref=e30]: "0"
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - heading "Recent Trips" [level=2] [ref=e33]
+          - paragraph [ref=e34]:
+            - text: No trips logged yet.
+            - link "Log your first trip" [ref=e35] [cursor=pointer]:
+              - /url: /trips/new
+        - generic [ref=e36]:
+          - heading "Vehicles" [level=2] [ref=e37]
+          - paragraph [ref=e38]:
+            - text: No vehicles added.
+            - link "Add a vehicle" [ref=e39] [cursor=pointer]:
+              - /url: /vehicles/new
+  - alert [ref=e40]
