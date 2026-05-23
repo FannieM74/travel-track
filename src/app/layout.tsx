@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/lib/auth";
 import SessionProvider from "@/components/session-provider";
+import NavMenu from "@/components/nav-menu";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,22 +33,13 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <SessionProvider session={session}>
-          <nav className="border-b px-6 py-3 flex items-center justify-between">
+          <nav className="border-b px-4 md:px-6 py-3 flex items-center justify-between">
             <a href="/" className="font-bold text-lg">TravelTrack</a>
-            <div className="flex gap-4 items-center">
-              {session?.user ? (
-                <>
-                  <a href="/dashboard" className="text-sm hover:underline">Dashboard</a>
-                  <a href="/trips" className="text-sm hover:underline">Trips</a>
-                  <a href="/vehicles" className="text-sm hover:underline">Vehicles</a>
-                  <a href="/reports" className="text-sm hover:underline">Reports</a>
-                  <span className="text-sm text-gray-500">{session.user.email}</span>
-                  <a href="/api/auth/signout" className="text-sm text-red-600 hover:underline">Sign out</a>
-                </>
-              ) : (
-                <a href="/auth/login" className="text-sm hover:underline">Sign In</a>
-              )}
-            </div>
+            {session?.user ? (
+              <NavMenu user={session.user} />
+            ) : (
+              <a href="/auth/login" className="text-sm hover:underline">Sign In</a>
+            )}
           </nav>
           <main className="min-h-[calc(100vh-57px)]">{children}</main>
         </SessionProvider>
