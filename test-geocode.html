@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geocode Test</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, sans-serif; background: #111; color: #eee; padding: 16px; }
+  h1 { font-size: 20px; margin-bottom: 8px; color: #d4a843; }
+  .status { font-size: 13px; color: #888; margin-bottom: 16px; }
+  #map { height: 300px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #333; }
+  .raw { background: #1a1a20; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-bottom: 16px; }
+  .raw h3 { font-size: 13px; color: #d4a843; margin-bottom: 6px; }
+  .raw pre { font-size: 11px; white-space: pre-wrap; word-break: break-all; color: #aaa; max-height: 300px; overflow: auto; }
+  .parsed { background: #1a1a20; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-bottom: 16px; }
+  .parsed h3 { font-size: 13px; color: #d4a843; margin-bottom: 6px; }
+  .parsed table { width: 100%; font-size: 13px; border-collapse: collapse; }
+  .parsed td { padding: 4px 8px; border-bottom: 1px solid #222; }
+  .parsed td:first-child { color: #888; width: 100px; }
+  .parsed td:last-child { color: #eee; }
+  .btn { background: #d4a843; color: #111; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 16px; }
+  .btn:hover { background: #e8c56a; }
+  .btn:disabled { background: #555; cursor: default; }
+  .coords { font-size: 12px; color: #888; margin-bottom: 8px; }
+  .note { font-size: 12px; color: #666; margin-top: 16px; padding: 8px; background: #1a1a20; border-radius: 6px; }
+</style>
+</head>
+<body>
+
+<h1>&#x1F4CD; Geocode Tester</h1>
+<p class="status" id="status">Tap the map to test any location</p>
+<button class="btn" id="gpsBtn">Get GPS Location (via HTTPS)</button>
+<div id="map"></div>
+
+<div class="coords" id="coords">&mdash;</div>
+
+<div class="raw">
+  <h3>Raw Nominatim Response</h3>
+  <pre id="rawJson">(waiting...)</pre>
+</div>
+
+<div class="parsed">
+  <h3>Parsed Fields (our API logic)</h3>
+  <table>
+    <tr><td>addr.house_number</td><td id="f_hn">&mdash;</td></tr>
+    <tr><td>addr.road</td><td id="f_road">&mdash;</td></tr>
+    <tr><td>addr.neighbourhood</td><td id="f_nb">&mdash;</td></tr>
+    <tr><td>addr.suburb</td><td id="f_sub">&mdash;</td></tr>
+    <tr><td>addr.city_district</td><td id="f_cd">&mdash;</td></tr>
+    <tr><td>addr.city / town / village</td><td id="f_city">&mdash;</td></tr>
+    <tr><td>addr.county</td><td id="f_county">&mdash;</td></tr>
+    <tr><td>addr.state</td><td id="f_state">&mdash;</td></tr>
+    <tr><td>addr.country</td><td id="f_country">&mdash;</td></tr>
+    <tr style="border-top: 2px solid #d4a843;"><td><strong>street (hn + road)</strong></td><td id="f_street"><strong>&mdash;</strong></td></tr>
+    <tr><td><strong>cleanName</strong></td><td id="f_clean"><strong>&mdash;</strong></td></tr>
+    <tr><td><strong>shortName</strong></td><td id="f_short"><strong>&mdash;</strong></td></tr>
+    <tr><td><strong>displayName</strong></td><td id="f_display"><strong>&mdash;</strong></td></tr>
+  </table>
+</div>
+
+<div class="note">
+  <strong>How our API builds the address:</strong><br>
+  <code>street</code> = house_number + road<br>
+  <code>cleanName</code> = neighbourhood &gt; suburb (if not Ward/Municipality) &gt; city_district &gt; city &gt; county &gt; state<br>
+  <code>shortName</code> = street || cleanName<br>
+  <code>displayName</code> = shortName + cleanName
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const statusEl = document.getElementById('status');
+const coordsEl = document.getElementById('coords');
+const gpsBtn = document.getElementById('gpsBtn');
+
+const rawJson = document.getElementById('rawJson');
+const f_hn = document.getElementById('f_hn');
+const f_road = document.getElementById('f_road');
+const f_nb = document.getElementById('f_nb');
+const f_sub = document.getElementById('f_sub');
+const f_cd = document.getElementById('f_cd');
+const f_city = document.getElementById('f_city');
+const f_county = document.getElementById('f_county');
+const f_state = document.getElementById('f_state');
+const f_country = document.getElementById('f_country');
+const f_street = document.getElementById('f_street');
+const f_clean = document.getElementById('f_clean');
+const f_short = document.getElementById('f_short');
+const f_display = document.getElementById('f_display');
+
+let map;
+
+function initMap() {
+  map = L.map('map').setView([-30.5595, 22.9375], 5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OSM'
+  }).addTo(map);
+
+  let marker = null;
+  map.on('click', (e) => {
+    const { lat, lng: lon } = e.latlng;
+    if (marker) marker.remove();
+    marker = L.marker([lat, lon]).addTo(map);
+    lookup(lat, lon);
+  });
+}
+
+function display(lat, lon, data) {
+  const addr = data.address || {};
+  const hn = addr.house_number || '';
+  const road = addr.road || '';
+  const nb = addr.neighbourhood || '';
+  const sub = addr.suburb || '';
+  const cd = addr.city_district || '';
+  const city = addr.city || addr.town || addr.village || '';
+  const county = addr.county || '';
+  const state = addr.state || '';
+  const country = addr.country || '';
+
+  function isWard(v) { return /ward|municipality/i.test(v); }
+
+  const street = [hn, road].filter(Boolean).join(' ');
+  const cleanNb = isWard(nb) ? '' : nb;
+  const cleanSub = isWard(sub) ? '' : sub;
+  const cleanName = cleanNb || cleanSub || cd || city || county || state;
+  const shortName = street || cleanName || `${lat}, ${lon}`;
+  const displayName = [shortName, cleanName].filter(Boolean).join(', ') || data.display_name || `${lat}, ${lon}`;
+
+  coordsEl.textContent = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+  rawJson.textContent = JSON.stringify(data, null, 2);
+
+  f_hn.textContent = hn || '(empty)';
+  f_road.textContent = road || '(empty)';
+  f_nb.textContent = nb || '(empty)';
+  f_sub.textContent = sub || '(empty)';
+  f_cd.textContent = cd || '(empty)';
+  f_city.textContent = city || '(empty)';
+  f_county.textContent = county || '(empty)';
+  f_state.textContent = state || '(empty)';
+  f_country.textContent = country || '(empty)';
+  f_street.textContent = street || '(empty — no road/house_number)';
+  f_clean.textContent = cleanName || '(empty)';
+  f_short.textContent = shortName;
+  f_display.textContent = displayName;
+}
+
+async function lookup(lat, lon) {
+  statusEl.textContent = 'Looking up...';
+  rawJson.textContent = '(loading...)';
+
+  const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`;
+
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'TravelTrack-Test/1.0' }
+    });
+    const data = await res.json();
+    display(lat, lon, data);
+    statusEl.textContent = 'Done';
+  } catch (err) {
+    statusEl.textContent = 'Error: ' + err.message;
+    rawJson.textContent = err.message;
+  }
+}
+
+gpsBtn.addEventListener('click', () => {
+  if (!navigator.geolocation) {
+    statusEl.textContent = 'GPS not available on this device. Tap the map instead.';
+    return;
+  }
+  gpsBtn.disabled = true;
+  gpsBtn.textContent = 'Getting location...';
+  statusEl.textContent = 'Requesting GPS...';
+  statusEl.style.color = '#d4a843';
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const { latitude: lat, longitude: lon } = pos.coords;
+      gpsBtn.disabled = false;
+      gpsBtn.textContent = 'Get GPS Location (via HTTPS)';
+      map.setView([lat, lon], 15);
+      if (window._marker) window._marker.remove();
+      window._marker = L.marker([lat, lon]).addTo(map);
+      lookup(lat, lon);
+    },
+    (err) => {
+      statusEl.textContent = 'GPS blocked — needs HTTPS. Tap the map to test a location.';
+      statusEl.style.color = '#e8c56a';
+      gpsBtn.disabled = false;
+      gpsBtn.textContent = 'Get GPS Location (via HTTPS)';
+    },
+    { enableHighAccuracy: true, timeout: 15000 }
+  );
+});
+
+// Pre-load a test location (Benoni, SA)
+setTimeout(() => {
+  const lat = -26.149, lon = 28.329;
+  map.setView([lat, lon], 15);
+  window._marker = L.marker([lat, lon]).addTo(map);
+  lookup(lat, lon);
+}, 500);
+
+initMap();
+</script>
+</body>
+</html>

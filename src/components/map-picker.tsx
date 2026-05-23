@@ -73,7 +73,7 @@ export function MapPicker({ onRouteChange, endPointFromSearch, onStartLocated }:
           const data = await res.json();
 
           endRef.current = { lat, lon };
-          endNameRef.current = data.name;
+          endNameRef.current = data.displayName;
           setEndPoint({ lat, lon });
           setShowAccept(false);
           setRouteAccepted(false);
