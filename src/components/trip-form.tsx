@@ -152,7 +152,7 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
         </div>
       </div>
 
-      <div className="hidden md:block border rounded-lg p-4 bg-gray-50">
+      <div className="border rounded-lg p-4 bg-gray-50">
         <label className="block text-sm font-medium mb-2">Pin on Map</label>
         <MapPicker onRouteChange={handleRouteChange} />
       </div>
