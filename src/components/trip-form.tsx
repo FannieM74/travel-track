@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { createTrip, updateTrip } from "@/actions/trips";
 import { getLastOdometer } from "@/actions/odometer";
 import { MapPicker } from "./map-picker";
@@ -31,6 +31,8 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
   const [startLocation, setStartLocation] = useState(trip?.startLocation ?? "");
   const [endLocation, setEndLocation] = useState(trip?.endLocation ?? "");
   const [loading, setLoading] = useState(false);
+  const startOdoRef = useRef(startOdometer);
+  startOdoRef.current = startOdometer;
 
   const handleVehicleChange = useCallback(async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const vehicleId = e.target.value;
@@ -40,6 +42,7 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
       const last = await getLastOdometer(vehicleId);
       if (last) {
         setStartOdometer(last.value.toString());
+        setEndOdometer("");
       }
     } finally {
       setLoading(false);
@@ -50,11 +53,12 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
     (start: { lat: number; lon: number }, end: { lat: number; lon: number }, distanceKm: number) => {
       setStartLocation(`${start.lat.toFixed(4)}, ${start.lon.toFixed(4)}`);
       setEndLocation(`${end.lat.toFixed(4)}, ${end.lon.toFixed(4)}`);
-      if (startOdometer) {
-        setEndOdometer((parseInt(startOdometer) + distanceKm).toString());
+      const odo = startOdoRef.current;
+      if (odo) {
+        setEndOdometer((parseInt(odo) + distanceKm).toString());
       }
     },
-    [startOdometer],
+    [],
   );
 
   return (

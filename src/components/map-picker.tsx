@@ -4,6 +4,13 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
+
 interface MapPickerProps {
   onRouteChange: (start: { lat: number; lon: number }, end: { lat: number; lon: number }, distanceKm: number) => void;
 }
@@ -13,6 +20,8 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
   const mapInstance = useRef<L.Map | null>(null);
   const markers = useRef<L.Marker[]>([]);
   const routeLayer = useRef<L.Polyline | null>(null);
+  const startRef = useRef<{ lat: number; lon: number } | null>(null);
+  const endRef = useRef<{ lat: number; lon: number } | null>(null);
   const [startPoint, setStartPoint] = useState<{ lat: number; lon: number } | null>(null);
   const [endPoint, setEndPoint] = useState<{ lat: number; lon: number } | null>(null);
 
@@ -26,11 +35,13 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
 
     map.on("click", (e: L.LeafletMouseEvent) => {
       const { lat, lng: lon } = e.latlng;
-      if (!startPoint) {
+      if (!startRef.current) {
+        startRef.current = { lat, lon };
         setStartPoint({ lat, lon });
         const marker = L.marker([lat, lon]).addTo(map).bindPopup("Start");
         markers.current.push(marker);
-      } else if (!endPoint) {
+      } else if (!endRef.current) {
+        endRef.current = { lat, lon };
         setEndPoint({ lat, lon });
         const marker = L.marker([lat, lon]).addTo(map).bindPopup("End");
         markers.current.push(marker);
@@ -43,7 +54,7 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
       map.remove();
       mapInstance.current = null;
     };
-  }, [startPoint, endPoint]);
+  }, []);
 
   const handleRouteChange = useCallback(onRouteChange, [onRouteChange]);
 
@@ -68,6 +79,8 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
     markers.current.forEach((m) => m.remove());
     markers.current = [];
     if (routeLayer.current) routeLayer.current.remove();
+    startRef.current = null;
+    endRef.current = null;
     setStartPoint(null);
     setEndPoint(null);
   }
