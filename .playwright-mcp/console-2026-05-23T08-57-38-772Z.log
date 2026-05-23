@@ -1,3 +1,0 @@
-[     616ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ https://travel-tracking-eight.vercel.app/trips/new:0
-[   38297ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ https://travel-tracking-eight.vercel.app/trips/marker-shadow.png:0
-[   38311ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ https://travel-tracking-eight.vercel.app/trips/marker-icon.png:0
