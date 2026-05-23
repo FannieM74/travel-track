@@ -42,12 +42,22 @@ export async function GET(req: Request) {
     }
 
     const addr = data.address || {};
-    const suburb = addr.suburb && !/ward|municipality/i.test(addr.suburb) ? addr.suburb : null;
-    const city = addr.city || addr.town || addr.village || "";
+
+    function isWard(v: string | undefined) {
+      return v ? /ward|municipality/i.test(v) : true;
+    }
+
+    const road = addr.road || "";
+    const suburb = isWard(addr.suburb) ? "" : (addr.suburb || "");
+    const city = addr.city || addr.town || addr.village || (isWard(addr.city_district) ? "" : (addr.city_district || ""));
+    const postcode = addr.postcode || "";
+
+    const parts = [road, suburb, city, postcode].filter(Boolean);
+    const displayName = parts.join(", ") || data.display_name || `${lat}, ${lon}`;
 
     return NextResponse.json({
-      name: data.name || `${lat}, ${lon}`,
-      displayName: data.display_name || `${lat}, ${lon}`,
+      name: road || suburb || city || `${lat}, ${lon}`,
+      displayName,
       suburb: suburb || null,
       city: city || null,
     });
