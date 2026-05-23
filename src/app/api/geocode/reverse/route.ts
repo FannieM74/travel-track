@@ -1,12 +1,30 @@
 import { NextResponse } from "next/server";
 
+async function snapToRoad(lat: number, lon: number) {
+  const osrmUrl = `https://router.project-osrm.org/nearest/v1/driving/${lon},${lat}?number=1`;
+  const res = await fetch(osrmUrl);
+  const data = await res.json();
+  if (data.code === "Ok" && data.waypoints?.length) {
+    const [snappedLon, snappedLat] = data.waypoints[0].location;
+    return { lat: snappedLat, lon: snappedLon };
+  }
+  return { lat, lon };
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
-  const lat = url.searchParams.get("lat");
-  const lon = url.searchParams.get("lon");
+  let lat = parseFloat(url.searchParams.get("lat") || "");
+  let lon = parseFloat(url.searchParams.get("lon") || "");
+  const snap = url.searchParams.get("snap") === "true";
 
   if (!lat || !lon) {
     return NextResponse.json({ error: "Missing lat or lon" }, { status: 400 });
+  }
+
+  if (snap) {
+    const snapped = await snapToRoad(lat, lon);
+    lat = snapped.lat;
+    lon = snapped.lon;
   }
 
   const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`;

@@ -91,7 +91,7 @@ export function MapPicker({ onRouteChange, endPointFromSearch, onStartLocated }:
             const marker = L.marker([lat, lon]).addTo(map).bindPopup("You are here");
             markers.current.push(marker);
 
-            const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
+            const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}&snap=true`);
             const data = await res.json();
 
             startRef.current = { lat, lon };
