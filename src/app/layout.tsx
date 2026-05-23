@@ -4,6 +4,7 @@ import "./globals.css";
 import { auth } from "@/lib/auth";
 import SessionProvider from "@/components/session-provider";
 import NavMenu from "@/components/nav-menu";
+import ThemeToggle from "@/components/theme-toggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,16 +31,36 @@ export default async function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <SessionProvider session={session}>
-          <nav className="border-b border-gray-200 shadow-sm px-4 md:px-6 py-3 flex items-center justify-between">
+          <nav className="border-b shadow-sm px-4 md:px-6 py-3 flex items-center justify-between" style={{ borderColor: "var(--line)", backgroundColor: "var(--body)" }}>
             <a href="/" className="font-bold text-lg">TravelTrack</a>
-            {session?.user ? (
-              <NavMenu userEmail={session.user?.email} />
-            ) : (
-              <a href="/auth/login" className="text-sm hover:underline">Sign In</a>
-            )}
+            <div className="flex items-center gap-2">
+              {session?.user ? (
+                <NavMenu userEmail={session.user?.email} />
+              ) : (
+                <a href="/auth/login" className="text-sm hover:underline" style={{ color: "var(--accent)" }}>Sign In</a>
+              )}
+              <ThemeToggle />
+            </div>
           </nav>
           <main className="min-h-[calc(100vh-57px)]">{children}</main>
         </SessionProvider>

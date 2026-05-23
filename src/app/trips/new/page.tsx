@@ -14,7 +14,7 @@ export default async function NewTripPage() {
 
   return (
     <div className="max-w-lg mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Log a Trip</h1>
+      <h1 className="text-2xl font-bold mb-6 text-fg">Log a Trip</h1>
       <TripForm vehicles={userVehicles} />
     </div>
   );

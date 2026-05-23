@@ -11,7 +11,7 @@ interface Trip {
 
 export function RecentTrips({ trips }: { trips: Trip[] }) {
   if (trips.length === 0) {
-    return <p className="text-gray-500">No trips logged yet. <Link href="/trips/new" className="text-blue-600">Log your first trip</Link></p>;
+    return <p className="text-fg-secondary">No trips logged yet. <Link href="/trips/new" className="text-accent">Log your first trip</Link></p>;
   }
   return (
     <div className="space-y-2">
@@ -19,14 +19,14 @@ export function RecentTrips({ trips }: { trips: Trip[] }) {
         <Link
           key={trip.id}
           href={`/trips/${trip.id}`}
-          className="block p-4 border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200"
+          className="block p-4 border border-line rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 bg-card"
         >
           <div className="flex justify-between items-start">
             <div className="min-w-0 flex-1">
-              <p className="font-medium truncate">{trip.startLocation} → {trip.endLocation}</p>
-              <p className="text-sm text-gray-500 mt-0.5">{trip.date} — {trip.purpose}</p>
+              <p className="font-medium text-fg truncate">{trip.startLocation} → {trip.endLocation}</p>
+              <p className="text-sm text-fg-secondary mt-0.5">{trip.date} — {trip.purpose}</p>
             </div>
-            <span className="text-sm font-semibold text-gray-700 ml-3 whitespace-nowrap">{trip.totalKm} km</span>
+            <span className="text-sm font-semibold text-fg-secondary ml-3 whitespace-nowrap">{trip.totalKm} km</span>
           </div>
         </Link>
       ))}

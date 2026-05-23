@@ -16,7 +16,7 @@ export default function NavMenu({ userEmail }: { userEmail?: string | null }) {
     <>
       <button
         onClick={() => setOpen(!open)}
-        className="md:hidden p-2 -mr-2 relative z-50 text-gray-700"
+        className="md:hidden p-2 -mr-2 relative z-50 text-fg"
         aria-label="Toggle menu"
       >
         <div className="w-5 h-4 relative">
@@ -28,13 +28,15 @@ export default function NavMenu({ userEmail }: { userEmail?: string | null }) {
 
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 md:hidden"
+          style={{ backgroundColor: "rgba(0,0,0,0.3)", backdropFilter: "blur(4px)" }}
           onClick={() => setOpen(false)}
         />
       )}
 
       <div
-        className={`fixed top-0 right-0 z-40 h-full w-64 bg-white shadow-2xl border-l transform transition-transform duration-200 md:static md:h-auto md:w-auto md:shadow-none md:border-l-0 md:transform-none md:bg-transparent md:flex md:items-center md:gap-4 ${open ? "translate-x-0" : "translate-x-full md:translate-x-0"}`}
+        className={`fixed top-0 right-0 z-40 h-full w-64 shadow-2xl transform transition-transform duration-200 md:static md:h-auto md:w-auto md:shadow-none md:border-l-0 md:transform-none md:flex md:items-center md:gap-4 ${open ? "translate-x-0" : "translate-x-full md:translate-x-0"}`}
+        style={{ backgroundColor: "var(--card)", borderLeft: "1px solid var(--line)" }}
       >
         <div className="flex flex-col pt-20 px-6 gap-2 md:pt-0 md:px-0 md:flex-row md:items-center md:gap-4">
           {navLinks.map((link) => (
@@ -42,20 +44,20 @@ export default function NavMenu({ userEmail }: { userEmail?: string | null }) {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="text-sm hover:underline py-2 md:py-0 text-gray-900"
+              className="text-sm hover:underline py-2 md:py-0 text-fg"
             >
               {link.label}
             </a>
           ))}
-          <span className="text-sm text-gray-500 hidden md:inline">{userEmail}</span>
+          <span className="text-sm hidden md:inline text-fg-secondary">{userEmail}</span>
           <a
             href="/api/auth/signout"
             onClick={() => setOpen(false)}
-            className="text-sm text-red-600 hover:underline py-2 md:py-0"
+            className="text-sm hover:underline py-2 md:py-0 text-danger"
           >
             Sign out
           </a>
-          <span className="text-sm text-gray-500 border-t pt-4 mt-2 md:hidden">{userEmail}</span>
+          <span className="text-sm border-t pt-4 mt-2 md:hidden text-fg-secondary" style={{ borderTopColor: "var(--line)" }}>{userEmail}</span>
         </div>
       </div>
     </>

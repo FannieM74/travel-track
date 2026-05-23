@@ -83,18 +83,19 @@ export function AddressSearch({ value, onChange, onSelect, placeholder, disabled
         onChange={handleInputChange}
         placeholder={placeholder || "Search street address..."}
         disabled={disabled}
-        className="w-full border rounded px-4 py-3 text-base disabled:bg-gray-100"
+        className="w-full border border-line rounded px-4 py-3 text-base bg-input text-fg disabled:opacity-50"
       />
       {isSearching && (
-        <span className="absolute right-3 top-2.5 text-xs text-gray-400">Searching...</span>
+        <span className="absolute right-3 top-3 text-xs text-fg-muted">Searching...</span>
       )}
       {isOpen && results.length > 0 && (
-        <ul className="absolute z-50 w-full bg-white border rounded-lg mt-1 shadow-lg max-h-48 overflow-y-auto text-gray-900">
+        <ul className="absolute z-50 w-full bg-card border border-line rounded-lg mt-1 shadow-lg max-h-48 overflow-y-auto text-fg">
           {results.map((r, i) => (
             <li
               key={i}
               onClick={() => handleSelect(r)}
-              className="px-4 py-2.5 hover:bg-blue-50 cursor-pointer text-sm border-b last:border-0 truncate"
+              className="px-4 py-2.5 hover:bg-card-hover cursor-pointer text-sm border-b last:border-0 truncate"
+              style={{ borderColor: "var(--line-light)" }}
             >
               {r.displayName}
             </li>

@@ -32,30 +32,30 @@ export default async function DashboardPage() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <Link href="/trips/new" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <h1 className="text-2xl font-bold text-fg">Dashboard</h1>
+        <Link href="/trips/new" className="bg-accent text-on-accent px-4 py-2 rounded-lg hover:bg-accent-light transition-colors font-medium">
           + Log Trip
         </Link>
       </div>
 
-      <p className="text-sm text-gray-500 mb-4">Tax Year: {taxYear}/{taxYear + 1}</p>
+      <p className="text-sm text-fg-secondary mb-4">Tax Year: {taxYear}/{taxYear + 1}</p>
       <DashboardCards totalKm={totalKm} businessKm={businessKm} businessPercent={businessPercent} tripCount={tripCount} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <h2 className="text-lg font-semibold mb-3">Recent Trips</h2>
+          <h2 className="text-lg font-semibold mb-3 text-fg">Recent Trips</h2>
           <RecentTrips trips={recentTrips} />
         </div>
         <div>
-          <h2 className="text-lg font-semibold mb-3">Vehicles</h2>
+          <h2 className="text-lg font-semibold mb-3 text-fg">Vehicles</h2>
           {vehicleList.length === 0 ? (
-            <p className="text-gray-500">No vehicles added. <Link href="/vehicles/new" className="text-blue-600">Add a vehicle</Link></p>
+            <p className="text-fg-secondary">No vehicles added. <Link href="/vehicles/new" className="text-accent">Add a vehicle</Link></p>
           ) : (
             <div className="space-y-2">
               {vehicleList.map((v) => (
-                <div key={v.id} className="p-3 border rounded-lg">
-                  <p className="font-medium">{v.make} {v.model} ({v.year})</p>
-                  <p className="text-sm text-gray-500">{v.licensePlate}</p>
+                <div key={v.id} className="p-3 border border-line rounded-xl bg-card">
+                  <p className="font-medium text-fg">{v.make} {v.model} ({v.year})</p>
+                  <p className="text-sm text-fg-secondary">{v.licensePlate}</p>
                 </div>
               ))}
             </div>

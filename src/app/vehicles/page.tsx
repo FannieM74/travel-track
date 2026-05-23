@@ -14,22 +14,22 @@ export default async function VehiclesPage() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Vehicles</h1>
-        <Link href="/vehicles/new" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <h1 className="text-2xl font-bold text-fg">Vehicles</h1>
+        <Link href="/vehicles/new" className="bg-accent text-on-accent px-4 py-2 rounded-lg hover:bg-accent-light transition-colors font-medium">
           + Add Vehicle
         </Link>
       </div>
       {userVehicles.length === 0 ? (
-        <p className="text-gray-500">No vehicles yet. <Link href="/vehicles/new" className="text-blue-600">Add your first vehicle</Link></p>
+        <p className="text-fg-secondary">No vehicles yet. <Link href="/vehicles/new" className="text-accent">Add your first vehicle</Link></p>
       ) : (
         <div className="grid gap-4">
           {userVehicles.map((v) => (
-            <div key={v.id} className="p-4 border rounded-lg flex justify-between items-center">
+            <div key={v.id} className="p-4 border border-line rounded-xl bg-card shadow-sm flex justify-between items-center">
               <div>
-                <p className="font-medium">{v.make} {v.model} ({v.year})</p>
-                <p className="text-sm text-gray-500">{v.licensePlate || "No plate"}</p>
+                <p className="font-medium text-fg">{v.make} {v.model} ({v.year})</p>
+                <p className="text-sm text-fg-secondary">{v.licensePlate || "No plate"}</p>
               </div>
-              <Link href={`/vehicles/${v.id}`} className="text-sm text-blue-600 hover:underline">Edit</Link>
+              <Link href={`/vehicles/${v.id}`} className="text-sm text-accent hover:underline">Edit</Link>
             </div>
           ))}
         </div>

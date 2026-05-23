@@ -72,15 +72,15 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
   return (
     <form action={trip ? updateTrip.bind(null, trip.id) : createTrip} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium mb-1">Date</label>
+        <label className="block text-sm font-medium mb-1 text-fg">Date</label>
         <input name="date" type="date" required defaultValue={trip?.date ?? new Date().toISOString().split("T")[0]}
-          className="w-full border rounded px-3 py-2" />
+          className="w-full border border-line rounded px-3 py-2 bg-input text-fg" />
       </div>
       <div>
-        <label className="block text-sm font-medium mb-1">Vehicle</label>
+        <label className="block text-sm font-medium mb-1 text-fg">Vehicle</label>
         <select name="vehicleId" required defaultValue={trip?.vehicleId ?? ""}
           onChange={!trip ? handleVehicleChange : undefined}
-          className="w-full border rounded px-3 py-2">
+          className="w-full border border-line rounded px-3 py-2 bg-input text-fg">
           <option value="">Select vehicle</option>
           {vehicles.map((v) => (
             <option key={v.id} value={v.id}>{v.make} {v.model} ({v.licensePlate})</option>
@@ -89,33 +89,33 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Start Odometer (km)</label>
+          <label className="block text-sm font-medium mb-1 text-fg">Start Odometer (km)</label>
           <input name="startOdometer" type="number" required value={startOdometer}
             onChange={e => setStartOdometer(e.target.value)}
-            className="w-full border rounded px-3 py-2" />
-          {loading && <span className="text-xs text-gray-500">Loading last reading...</span>}
+            className="w-full border border-line rounded px-3 py-2 bg-input text-fg" />
+          {loading && <span className="text-xs text-fg-muted">Loading last reading...</span>}
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">End Odometer (km)</label>
+          <label className="block text-sm font-medium mb-1 text-fg">End Odometer (km)</label>
           <input name="endOdometer" type="number" required value={endOdometer}
             onChange={e => setEndOdometer(e.target.value)}
-            className="w-full border rounded px-3 py-2" />
+            className="w-full border border-line rounded px-3 py-2 bg-input text-fg" />
         </div>
       </div>
 
-      <div className="border border-gray-200 rounded-xl shadow-sm p-4 bg-gray-50">
-        <label className="block text-sm font-medium mb-2">Pin on Map</label>
+      <div className="border border-line rounded-xl shadow-sm p-4 bg-panel">
+        <label className="block text-sm font-medium mb-2 text-fg">Pin on Map</label>
         <MapPicker onRouteChange={handleRouteChange} endPointFromSearch={endPointFromSearch} onStartLocated={setStartLocation} />
       </div>
 
       <div>
-        <label className="text-sm font-medium mb-1">Start Location</label>
+        <label className="text-sm font-medium mb-1 text-fg">Start Location</label>
         <input name="startLocation" required value={startLocation}
           onChange={e => setStartLocation(e.target.value)}
-          className="w-full border rounded px-3 py-2" placeholder="Start address" />
+          className="w-full border border-line rounded px-3 py-2 bg-input text-fg" placeholder="Start address" />
       </div>
       <div>
-        <label className="block text-sm font-medium mb-1">End Location</label>
+        <label className="block text-sm font-medium mb-1 text-fg">End Location</label>
         <AddressSearch
           value={endLocation}
           onChange={setEndLocation}
@@ -128,24 +128,24 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Purpose of Trip</label>
+        <label className="block text-sm font-medium mb-1 text-fg">Purpose of Trip</label>
         <textarea name="purpose" required defaultValue={trip?.purpose ?? ""}
-          className="w-full border rounded px-3 py-2" rows={2} placeholder="e.g. Client meeting in Cape Town" />
+          className="w-full border border-line rounded px-3 py-2 bg-input text-fg" rows={2} placeholder="e.g. Client meeting in Cape Town" />
       </div>
       <div>
-        <label className="block text-sm font-medium mb-1">Trip Type</label>
+        <label className="block text-sm font-medium mb-1 text-fg">Trip Type</label>
         <div className="flex gap-4">
-          <label className="flex items-center gap-2">
+          <label className="flex items-center gap-2 text-fg">
             <input name="isBusiness" type="radio" value="true" defaultChecked={trip ? trip.isBusiness : true} />
             Business
           </label>
-          <label className="flex items-center gap-2">
+          <label className="flex items-center gap-2 text-fg">
             <input name="isBusiness" type="radio" value="false" defaultChecked={trip ? !trip.isBusiness : false} />
             Private
           </label>
         </div>
       </div>
-      <button type="submit" className="w-full bg-blue-600 text-white rounded py-2 hover:bg-blue-700">
+      <button type="submit" className="w-full bg-accent text-on-accent rounded py-2 hover:bg-accent-light transition-colors font-medium">
         {trip ? "Update Trip" : "Log Trip"}
       </button>
     </form>

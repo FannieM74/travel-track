@@ -20,11 +20,11 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="max-w-lg mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Edit Trip</h1>
+      <h1 className="text-2xl font-bold mb-6 text-fg">Edit Trip</h1>
       <TripForm vehicles={userVehicles} trip={trip} />
 
       <form action={deleteTrip.bind(null, id)} className="mt-4">
-        <button type="submit" className="w-full border border-red-300 text-red-600 rounded py-2 hover:bg-red-50">
+        <button type="submit" className="w-full border border-line rounded py-2 text-danger hover:bg-card-hover transition-colors">
           Delete Trip
         </button>
       </form>

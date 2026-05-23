@@ -18,10 +18,10 @@ export function DashboardCards({ totalKm, businessKm, businessPercent, tripCount
       {cards.map((card, i) => (
         <div
           key={i}
-          className="p-5 border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200"
+          className="p-5 border border-line rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 bg-card"
         >
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">{card.label}</p>
-          <p className="text-3xl font-bold mt-1">{card.value}<span className="text-base text-gray-400 ml-1">{card.suffix}</span></p>
+          <p className="text-xs font-medium text-fg-muted uppercase tracking-wider">{card.label}</p>
+          <p className="text-3xl font-bold text-fg mt-1">{card.value}<span className="text-base text-fg-muted ml-1">{card.suffix}</span></p>
         </div>
       ))}
     </div>

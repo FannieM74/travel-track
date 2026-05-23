@@ -40,57 +40,57 @@ export default async function ReportsPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-2">SARS Reports</h1>
-      <p className="text-gray-500 mb-6">Tax Year: {taxYear}/{taxYear + 1}</p>
+      <h1 className="text-2xl font-bold mb-2 text-fg">SARS Reports</h1>
+      <p className="text-fg-secondary mb-6">Tax Year: {taxYear}/{taxYear + 1}</p>
 
       {reportData.length === 0 ? (
-        <p className="text-gray-500">Add vehicles and log trips to generate reports.</p>
+        <p className="text-fg-secondary">Add vehicles and log trips to generate reports.</p>
       ) : (
         <div className="space-y-6">
           {reportData.map((r) => (
-            <div key={r.vehicle.id} className="border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-1">
+            <div key={r.vehicle.id} className="border border-line rounded-xl bg-card p-6 shadow-sm">
+              <h2 className="text-xl font-semibold mb-1 text-fg">
                 {r.vehicle.make} {r.vehicle.model} ({r.vehicle.year})
               </h2>
-              <p className="text-sm text-gray-500 mb-4">{r.vehicle.licensePlate}</p>
+              <p className="text-sm text-fg-secondary mb-4">{r.vehicle.licensePlate}</p>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <div>
-                  <p className="text-sm text-gray-500">Opening (1 Mar)</p>
-                  <p className="font-bold">{r.odometer?.openingOdometer?.toLocaleString() || "—"} km</p>
+                  <p className="text-sm text-fg-secondary">Opening (1 Mar)</p>
+                  <p className="font-bold text-fg">{r.odometer?.openingOdometer?.toLocaleString() || "—"} km</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Closing (28 Feb)</p>
-                  <p className="font-bold">{r.odometer?.closingOdometer?.toLocaleString() || "—"} km</p>
+                  <p className="text-sm text-fg-secondary">Closing (28 Feb)</p>
+                  <p className="font-bold text-fg">{r.odometer?.closingOdometer?.toLocaleString() || "—"} km</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Total Kilometres</p>
-                  <p className="font-bold">{r.totalKm.toLocaleString()} km</p>
+                  <p className="text-sm text-fg-secondary">Total Kilometres</p>
+                  <p className="font-bold text-fg">{r.totalKm.toLocaleString()} km</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Business Kilometres</p>
-                  <p className="font-bold">{r.businessKm.toLocaleString()} km</p>
+                  <p className="text-sm text-fg-secondary">Business Kilometres</p>
+                  <p className="font-bold text-fg">{r.businessKm.toLocaleString()} km</p>
                 </div>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-2">Scale of Costs — Estimated Deduction</h3>
+              <div className="bg-panel p-4 rounded-lg border border-line">
+                <h3 className="font-semibold mb-2 text-fg">Scale of Costs — Estimated Deduction</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
-                    <p className="text-sm text-gray-500">Fixed Cost</p>
-                    <p className="font-bold">R {r.deduction.fixedCostDeduction.toLocaleString()}</p>
+                    <p className="text-sm text-fg-secondary">Fixed Cost</p>
+                    <p className="font-bold text-fg">R {r.deduction.fixedCostDeduction.toLocaleString()}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Fuel</p>
-                    <p className="font-bold">R {r.deduction.fuelDeduction.toLocaleString()}</p>
+                    <p className="text-sm text-fg-secondary">Fuel</p>
+                    <p className="font-bold text-fg">R {r.deduction.fuelDeduction.toLocaleString()}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Maintenance</p>
-                    <p className="font-bold">R {r.deduction.maintenanceDeduction.toLocaleString()}</p>
+                    <p className="text-sm text-fg-secondary">Maintenance</p>
+                    <p className="font-bold text-fg">R {r.deduction.maintenanceDeduction.toLocaleString()}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Total</p>
-                    <p className="font-bold text-lg">R {r.deduction.totalDeduction.toLocaleString()}</p>
+                    <p className="text-sm text-fg-secondary">Total</p>
+                    <p className="font-bold text-lg text-accent">R {r.deduction.totalDeduction.toLocaleString()}</p>
                   </div>
                 </div>
               </div>
@@ -98,7 +98,7 @@ export default async function ReportsPage() {
               <div className="mt-4">
                 <a
                   href={`/api/reports/${taxYear}/${r.vehicle.id}/pdf`}
-                  className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  className="inline-block bg-accent text-on-accent px-4 py-2 rounded hover:bg-accent-light transition-colors font-medium"
                 >
                   Download PDF Logbook
                 </a>

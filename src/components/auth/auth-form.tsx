@@ -43,7 +43,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
 
   return (
     <div className="mx-auto max-w-sm mt-20">
-      <h1 className="text-2xl font-bold mb-6 text-center">
+      <h1 className="text-2xl font-bold mb-6 text-center text-fg">
         {mode === "login" ? "Sign In" : "Create Account"}
       </h1>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -53,7 +53,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full border rounded px-3 py-2"
+          className="w-full border border-line rounded px-3 py-2 bg-input text-fg"
         />
         <input
           type="password"
@@ -61,12 +61,12 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full border rounded px-3 py-2"
+          className="w-full border border-line rounded px-3 py-2 bg-input text-fg"
         />
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-sm" style={{ color: "var(--danger)" }}>{error}</p>}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white rounded py-2 hover:bg-blue-700"
+          className="w-full bg-accent text-on-accent rounded py-2 hover:bg-accent-light transition-colors font-medium"
         >
           {mode === "login" ? "Sign In" : "Create Account"}
         </button>
@@ -74,16 +74,16 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
       <div className="mt-4 text-center">
         <button
           onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-          className="w-full border rounded py-2 hover:bg-gray-50"
+          className="w-full border border-line rounded py-2 bg-card text-fg hover:bg-card-hover transition-colors"
         >
           Sign in with Google
         </button>
       </div>
-      <p className="mt-4 text-center text-sm text-gray-500">
+      <p className="mt-4 text-center text-sm text-fg-secondary">
         {mode === "login" ? (
-          <>Don&apos;t have an account? <a href="/auth/register" className="text-blue-600">Register</a></>
+          <>Don&apos;t have an account? <a href="/auth/register" className="text-accent">Register</a></>
         ) : (
-          <>Already have an account? <a href="/auth/login" className="text-blue-600">Sign in</a></>
+          <>Already have an account? <a href="/auth/login" className="text-accent">Sign in</a></>
         )}
       </p>
     </div>
