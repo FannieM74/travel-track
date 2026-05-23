@@ -1,0 +1,40 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link "TravelTrack" [ref=e3] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e4]:
+      - button "Toggle menu" [ref=e5]
+      - generic [ref=e11]:
+        - link "Dashboard" [ref=e12] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Trips" [ref=e13] [cursor=pointer]:
+          - /url: /trips
+        - link "Vehicles" [ref=e14] [cursor=pointer]:
+          - /url: /vehicles
+        - link "Reports" [ref=e15] [cursor=pointer]:
+          - /url: /reports
+        - link "Sign out" [ref=e16] [cursor=pointer]:
+          - /url: /api/auth/signout
+        - generic [ref=e17]: demo@test.com
+      - button "Switch to light mode" [ref=e18]:
+        - img [ref=e19]
+  - main [ref=e21]:
+    - generic [ref=e22]:
+      - link "← Back to vehicles" [ref=e23] [cursor=pointer]:
+        - /url: /vehicles
+      - heading "Add Vehicle" [level=1] [ref=e24]
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: Make
+          - textbox "e.g. Toyota" [ref=e28]
+        - generic [ref=e29]:
+          - generic [ref=e30]: Model
+          - textbox "e.g. Corolla" [ref=e31]
+        - generic [ref=e32]:
+          - generic [ref=e33]: Year
+          - spinbutton [ref=e34]
+        - generic [ref=e35]:
+          - generic [ref=e36]: License Plate
+          - textbox "Optional" [ref=e37]
+        - button "Add Vehicle" [ref=e38]
+  - alert [ref=e39]

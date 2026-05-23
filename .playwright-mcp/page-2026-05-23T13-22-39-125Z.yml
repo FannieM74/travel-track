@@ -1,0 +1,66 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link "TravelTrack" [ref=e3] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e4]:
+      - button "Toggle menu" [ref=e5]
+      - generic [ref=e11]:
+        - link "Dashboard" [ref=e12] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Trips" [ref=e13] [cursor=pointer]:
+          - /url: /trips
+        - link "Vehicles" [ref=e14] [cursor=pointer]:
+          - /url: /vehicles
+        - link "Reports" [ref=e15] [cursor=pointer]:
+          - /url: /reports
+        - link "Sign out" [ref=e16] [cursor=pointer]:
+          - /url: /api/auth/signout
+        - generic [ref=e17]: demo@test.com
+      - button "Switch to light mode" [ref=e18]:
+        - img [ref=e19]
+  - main [ref=e21]:
+    - generic [ref=e22]:
+      - link "← Back to trips" [ref=e23] [cursor=pointer]:
+        - /url: /trips
+      - heading "Log a Trip" [level=1] [ref=e24]
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: Date
+          - textbox [ref=e28]: 2026-05-23
+        - generic [ref=e29]:
+          - generic [ref=e30]: Vehicle
+          - combobox [ref=e31]:
+            - option "Select vehicle" [selected]
+            - option "Toyota Corolla (CA 123-456)"
+            - option "Toyota Corolla (CA 123-456)"
+            - option "Toyota Corolla (CA 123-456)"
+            - option "Toyota Corolla (CA 123-456)"
+            - option "Toyota Corolla ()"
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - generic [ref=e34]: Start Odometer (km)
+            - spinbutton [ref=e35]
+          - generic [ref=e36]:
+            - generic [ref=e37]: End Odometer (km)
+            - spinbutton [ref=e38]
+        - generic [ref=e40]: Pin on Map
+        - generic [ref=e43]:
+          - text: Start Location
+          - textbox "Start address" [ref=e44]
+        - generic [ref=e45]:
+          - generic [ref=e46]: End Location
+          - textbox "Search street address..." [ref=e48]
+        - generic [ref=e49]:
+          - generic [ref=e50]: Purpose of Trip
+          - textbox "e.g. Client meeting in Cape Town" [ref=e51]
+        - generic [ref=e52]:
+          - generic [ref=e53]: Trip Type
+          - generic [ref=e54]:
+            - generic [ref=e55]:
+              - radio "Business" [checked] [ref=e56]
+              - text: Business
+            - generic [ref=e57]:
+              - radio "Private" [ref=e58]
+              - text: Private
+        - button "Log Trip" [ref=e59]
+  - alert [ref=e60]

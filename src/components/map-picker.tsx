@@ -31,6 +31,41 @@ export function MapPicker({ onRouteChange, endPointFromSearch, onStartLocated }:
   const [distanceKm, setDistanceKm] = useState(0);
   const [routeAccepted, setRouteAccepted] = useState(false);
 
+  async function updateStartAddress(lat: number, lon: number) {
+    try {
+      const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}&snap=true`);
+      const data = await res.json();
+      startNameRef.current = data.displayName || `${lat}, ${lon}`;
+      onStartLocated?.(data.displayName || `${lat}, ${lon}`);
+    } catch {
+      startNameRef.current = `${lat}, ${lon}`;
+      onStartLocated?.(`${lat}, ${lon}`);
+    }
+  }
+
+  function createStartMarker(map: any, L: any, lat: number, lon: number, bindPopupText = "Start") {
+    const marker = L.marker([lat, lon], { draggable: true }).addTo(map).bindPopup(bindPopupText);
+    markers.current.push(marker);
+
+    marker.on("dragend", async () => {
+      const pos = marker.getLatLng();
+      const newLat = pos.lat;
+      const newLon = pos.lng;
+
+      startRef.current = { lat: newLat, lon: newLon };
+      setStartPoint({ lat: newLat, lon: newLon });
+      setRouteAccepted(false);
+
+      await updateStartAddress(newLat, newLon);
+
+      if (endRef.current) {
+        map.fitBounds(L.latLngBounds([newLat, newLon], [endRef.current.lat, endRef.current.lon]), { padding: [50, 50] });
+      }
+    });
+
+    return marker;
+  }
+
   useEffect(() => {
     if (!mapRef.current || mapInstance.current) return;
 
@@ -56,19 +91,10 @@ export function MapPicker({ onRouteChange, endPointFromSearch, onStartLocated }:
           startRef.current = { lat, lon };
           setStartPoint({ lat, lon });
           setRouteAccepted(false);
-          const marker = L.marker([lat, lon]).addTo(map).bindPopup("Start");
-          markers.current.push(marker);
           map.setView([lat, lon], 15);
 
-          try {
-            const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
-            const data = await res.json();
-            startNameRef.current = data.displayName || `${lat}, ${lon}`;
-            onStartLocated?.(data.displayName || `${lat}, ${lon}`);
-          } catch {
-            startNameRef.current = `${lat}, ${lon}`;
-            onStartLocated?.(`${lat}, ${lon}`);
-          }
+          createStartMarker(map, L, lat, lon);
+          await updateStartAddress(lat, lon);
         } else if (!endRef.current) {
           const marker = L.marker([lat, lon]).addTo(map).bindPopup("End");
           markers.current.push(marker);
@@ -97,21 +123,11 @@ export function MapPicker({ onRouteChange, endPointFromSearch, onStartLocated }:
             const { latitude: lat, longitude: lon } = pos.coords;
             map.setView([lat, lon], 15);
 
-            const marker = L.marker([lat, lon]).addTo(map).bindPopup("You are here");
-            markers.current.push(marker);
-
-            try {
-              const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}&snap=true`);
-              const data = await res.json();
-              startNameRef.current = data.displayName || `${lat}, ${lon}`;
-              onStartLocated?.(data.displayName || `${lat}, ${lon}`);
-            } catch {
-              startNameRef.current = `${lat}, ${lon}`;
-              onStartLocated?.(`${lat}, ${lon}`);
-            }
-
             startRef.current = { lat, lon };
             setStartPoint({ lat, lon });
+
+            createStartMarker(map, L, lat, lon, "You are here");
+            await updateStartAddress(lat, lon);
           },
           () => {},
           { enableHighAccuracy: true, timeout: 10000 },
