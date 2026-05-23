@@ -19,7 +19,7 @@ export default async function TripsPage() {
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Trips</h1>
-        <Link href="/trips/new" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <Link href="/trips/new" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
           + Log Trip
         </Link>
       </div>
@@ -28,14 +28,17 @@ export default async function TripsPage() {
       ) : (
         <div className="space-y-3">
           {userTrips.map((t) => (
-            <Link key={t.id} href={`/trips/${t.id}`} className="block p-4 border rounded-lg hover:bg-gray-50">
+            <Link
+              key={t.id}
+              href={`/trips/${t.id}`}
+              className="block p-4 border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200"
+            >
               <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-medium">{t.startLocation} → {t.endLocation}</p>
-                  <p className="text-sm text-gray-500">{t.date} · {t.totalKm} km</p>
-                  <p className="text-sm text-gray-500">{vehicleMap.get(t.vehicleId) || "Unknown"} · {t.purpose}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium truncate">{t.startLocation} → {t.endLocation}</p>
+                  <p className="text-sm text-gray-500 mt-0.5">{t.date} · {t.totalKm} km · {vehicleMap.get(t.vehicleId) || "Unknown"} · {t.purpose}</p>
                 </div>
-                <span className={`text-xs px-2 py-1 rounded ${t.isBusiness ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}>
+                <span className={`text-xs font-medium px-2.5 py-1 rounded-full ml-3 whitespace-nowrap ${t.isBusiness ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}>
                   {t.isBusiness ? "Business" : "Private"}
                 </span>
               </div>

@@ -33,7 +33,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <SessionProvider session={session}>
-          <nav className="border-b px-4 md:px-6 py-3 flex items-center justify-between">
+          <nav className="border-b border-gray-200 shadow-sm px-4 md:px-6 py-3 flex items-center justify-between">
             <a href="/" className="font-bold text-lg">TravelTrack</a>
             {session?.user ? (
               <NavMenu userEmail={session.user?.email} />

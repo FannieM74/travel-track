@@ -16,12 +16,18 @@ export function RecentTrips({ trips }: { trips: Trip[] }) {
   return (
     <div className="space-y-2">
       {trips.map((trip) => (
-        <Link key={trip.id} href={`/trips/${trip.id}`} className="block p-3 border rounded-lg hover:bg-gray-50">
-          <div className="flex justify-between">
-            <span className="font-medium">{trip.startLocation} → {trip.endLocation}</span>
-            <span className="text-sm text-gray-500">{trip.totalKm} km</span>
+        <Link
+          key={trip.id}
+          href={`/trips/${trip.id}`}
+          className="block p-4 border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200"
+        >
+          <div className="flex justify-between items-start">
+            <div className="min-w-0 flex-1">
+              <p className="font-medium truncate">{trip.startLocation} → {trip.endLocation}</p>
+              <p className="text-sm text-gray-500 mt-0.5">{trip.date} — {trip.purpose}</p>
+            </div>
+            <span className="text-sm font-semibold text-gray-700 ml-3 whitespace-nowrap">{trip.totalKm} km</span>
           </div>
-          <p className="text-sm text-gray-500">{trip.date} — {trip.purpose}</p>
         </Link>
       ))}
     </div>

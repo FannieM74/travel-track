@@ -25,14 +25,17 @@ export async function GET(req: Request) {
     return v ? /ward|municipality/i.test(v) : false;
   }
 
+  const street = [addr.house_number, addr.road].filter(Boolean).join(" ");
   const suburb = !isWard(addr.suburb) ? addr.suburb : null;
   const neighbourhood = !isWard(addr.neighbourhood) ? addr.neighbourhood : null;
   const city = addr.city || addr.town || addr.village || "";
-  const shortName = neighbourhood || suburb || addr.city_district || city || addr.county || addr.state || `${lat}, ${lon}`;
+  const cleanName = neighbourhood || suburb || addr.city_district || city || addr.county || addr.state || "";
+  const shortName = street || cleanName || `${lat}, ${lon}`;
+  const displayName = [shortName, cleanName].filter(Boolean).join(", ") || data.display_name || `${lat}, ${lon}`;
 
   return NextResponse.json({
     name: shortName,
-    displayName: data.display_name || `${lat}, ${lon}`,
+    displayName,
     suburb: suburb || null,
     city: city || null,
   });

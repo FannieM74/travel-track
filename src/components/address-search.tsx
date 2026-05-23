@@ -89,7 +89,7 @@ export function AddressSearch({ value, onChange, onSelect, placeholder, disabled
         <span className="absolute right-3 top-2.5 text-xs text-gray-400">Searching...</span>
       )}
       {isOpen && results.length > 0 && (
-        <ul className="absolute z-50 w-full bg-white border rounded mt-1 shadow-lg max-h-48 overflow-y-auto text-gray-900">
+        <ul className="absolute z-50 w-full bg-white border rounded-lg mt-1 shadow-lg max-h-48 overflow-y-auto text-gray-900">
           {results.map((r, i) => (
             <li
               key={i}
