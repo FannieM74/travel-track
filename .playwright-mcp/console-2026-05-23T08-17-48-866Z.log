@@ -1,0 +1,6 @@
+[      36ms] [ERROR] [GSI_LOGGER]: FedCM get() rejects with NetworkError: Error retrieving a token. @ https://vercel.com/_next/static/chunks/1aoj5261kol5f.js?dpl=dpl_42zvXPNRXY9Mm9bRWZu4usgZawTd:1
+[     185ms] [ERROR] Failed to load resource: the server responded with a status of 429 () @ https://o205439.ingest.sentry.io/api/1323670/envelope/?sentry_key=d00780d432ac4ccf882f60dd02062e14&sentry_version=7&sentry_client=sentry.javascript.browser%2F7.111.0:0
+[     534ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://travel-tracking-eight.vercel.app/auth/register:0
+[    9094ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ https://travel-tracking-eight.vercel.app/api/auth/register:0
+[    9096ms] SyntaxError: Failed to execute 'json' on 'Response': Unexpected end of JSON input
+    at h (https://travel-tracking-eight.vercel.app/_next/static/chunks/0jazygswnhv.o.js:1:604)
