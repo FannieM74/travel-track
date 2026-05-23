@@ -25,8 +25,6 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
   const [endPoint, setEndPoint] = useState<{ lat: number; lon: number } | null>(null);
   const [startName, setStartName] = useState("");
   const [endName, setEndName] = useState("");
-  const [geoLoading, setGeoLoading] = useState(false);
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
   useEffect(() => {
     if (!mapRef.current || mapInstance.current) return;
@@ -75,6 +73,29 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
       });
 
       mapInstance.current = map;
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (pos) => {
+            const { latitude: lat, longitude: lon } = pos.coords;
+            map.setView([lat, lon], 15);
+
+            const marker = L.marker([lat, lon]).addTo(map).bindPopup("You are here");
+            markers.current.push(marker);
+
+            const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
+            const data = await res.json();
+            const name = data.name;
+
+            startRef.current = { lat, lon };
+            startNameRef.current = name;
+            setStartPoint({ lat, lon });
+            setStartName(name);
+          },
+          () => {},
+          { enableHighAccuracy: true, timeout: 10000 },
+        );
+      }
     }
 
     initMap();
@@ -107,40 +128,6 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
     }
   }, [startPoint, endPoint, handleRouteChange]);
 
-  async function useMyLocation() {
-    if (!navigator.geolocation || !mapInstance.current) return;
-    setGeoLoading(true);
-    try {
-      const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 10000,
-        })
-      );
-      const { latitude: lat, longitude: lon } = pos.coords;
-      const L = (await import("leaflet")).default;
-      const map = mapInstance.current;
-
-      map.setView([lat, lon], 15);
-
-      const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
-      const data = await res.json();
-      const name = data.name;
-
-      startRef.current = { lat, lon };
-      startNameRef.current = name;
-      setStartPoint({ lat, lon });
-      setStartName(name);
-
-      const marker = L.marker([lat, lon]).addTo(map).bindPopup(`Start: ${name}`);
-      markers.current.push(marker);
-    } catch {
-      // geolocation denied or failed
-    } finally {
-      setGeoLoading(false);
-    }
-  }
-
   function resetMap() {
     markers.current.forEach((m: any) => m.remove());
     markers.current = [];
@@ -163,21 +150,9 @@ export function MapPicker({ onRouteChange }: MapPickerProps) {
           <span>{startName || (startPoint ? "Looking up address..." : "Click map to set start")}</span>
           <span>{endName || (endPoint ? "Looking up address..." : "Click map to set end")}</span>
         </div>
-        <div className="flex gap-2">
-          {isMobile && (
-            <button
-              type="button"
-              onClick={useMyLocation}
-              disabled={geoLoading}
-              className="text-blue-600 hover:underline disabled:opacity-50"
-            >
-              {geoLoading ? "Locating..." : "📍 My Location"}
-            </button>
-          )}
-          <button type="button" onClick={resetMap} className="text-blue-600 hover:underline">
-            Reset
-          </button>
-        </div>
+        <button type="button" onClick={resetMap} className="text-blue-600 hover:underline">
+          Reset
+        </button>
       </div>
     </div>
   );

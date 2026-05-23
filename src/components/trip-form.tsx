@@ -32,7 +32,6 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
   const [endLocation, setEndLocation] = useState(trip?.endLocation ?? "");
   const [loading, setLoading] = useState(false);
   const [calcLoading, setCalcLoading] = useState(false);
-  const [geoLoading, setGeoLoading] = useState(false);
   const startOdoRef = useRef(startOdometer);
   startOdoRef.current = startOdometer;
 
@@ -68,27 +67,6 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
     },
     [],
   );
-
-  async function handleMyLocation() {
-    if (!navigator.geolocation) return;
-    setGeoLoading(true);
-    try {
-      const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 10000,
-        })
-      );
-      const { latitude: lat, longitude: lon } = pos.coords;
-      const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
-      const data = await res.json();
-      setStartLocation(data.name);
-    } catch {
-      // denied or failed
-    } finally {
-      setGeoLoading(false);
-    }
-  }
 
   async function handleCalculateDistance() {
     if (!startLocation.trim() || !endLocation.trim()) return;
@@ -159,17 +137,7 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <div className="flex items-center justify-between mb-1">
-            <label className="text-sm font-medium">Start Location</label>
-            <button
-              type="button"
-              onClick={handleMyLocation}
-              disabled={geoLoading}
-              className="text-xs text-blue-600 hover:underline disabled:opacity-50"
-            >
-              {geoLoading ? "..." : "📍 Use my location"}
-            </button>
-          </div>
+          <label className="text-sm font-medium mb-1">Start Location</label>
           <input name="startLocation" required value={startLocation}
             onChange={e => setStartLocation(e.target.value)}
             className="w-full border rounded px-3 py-2" placeholder="Suburb or address" />
