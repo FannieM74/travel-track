@@ -1,0 +1,78 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link "TravelTrack" [ref=e3] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e5]:
+      - link "Dashboard" [ref=e6] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Trips" [ref=e7] [cursor=pointer]:
+        - /url: /trips
+      - link "Vehicles" [ref=e8] [cursor=pointer]:
+        - /url: /vehicles
+      - link "Reports" [ref=e9] [cursor=pointer]:
+        - /url: /reports
+      - generic [ref=e10]: demo@test.com
+      - link "Sign out" [ref=e11] [cursor=pointer]:
+        - /url: /api/auth/signout
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - heading "Log a Trip" [level=1] [ref=e14]
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]: Date
+          - textbox [ref=e18]: 2026-05-23
+        - generic [ref=e19]:
+          - generic [ref=e20]: Vehicle
+          - combobox [ref=e21]:
+            - option "Select vehicle" [selected]
+            - option "Toyota Corolla (CA 123-456)"
+            - option "Toyota Corolla (CA 123-456)"
+            - option "Toyota Corolla (CA 123-456)"
+            - option "Toyota Corolla (CA 123-456)"
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e24]: Start Odometer (km)
+            - spinbutton [ref=e25]
+          - generic [ref=e26]:
+            - generic [ref=e27]: End Odometer (km)
+            - spinbutton [ref=e28]
+        - generic [ref=e29]:
+          - generic [ref=e30]: Pin on Map
+          - generic [ref=e31]:
+            - generic [ref=e32]:
+              - generic:
+                - generic [ref=e33]:
+                  - button "Zoom in" [ref=e34] [cursor=pointer]: +
+                  - button "Zoom out" [ref=e35] [cursor=pointer]: −
+                - generic [ref=e36]:
+                  - link "Leaflet" [ref=e37] [cursor=pointer]:
+                    - /url: https://leafletjs.com
+                    - img [ref=e38]
+                    - text: Leaflet
+                  - text: "| © OpenStreetMap contributors"
+            - generic [ref=e42]:
+              - generic [ref=e43]:
+                - generic [ref=e44]: Click map to set start
+                - generic [ref=e45]: Click map to set end
+              - button "Reset" [ref=e46]
+        - generic [ref=e47]:
+          - generic [ref=e48]:
+            - text: Start Location
+            - textbox "Suburb or address" [ref=e49]
+          - generic [ref=e50]:
+            - generic [ref=e51]: End Location
+            - textbox "Suburb or address" [ref=e52]
+        - generic [ref=e53]:
+          - generic [ref=e54]: Purpose of Trip
+          - textbox "e.g. Client meeting in Cape Town" [ref=e55]
+        - generic [ref=e56]:
+          - generic [ref=e57]: Trip Type
+          - generic [ref=e58]:
+            - generic [ref=e59]:
+              - radio "Business" [checked] [ref=e60]
+              - text: Business
+            - generic [ref=e61]:
+              - radio "Private" [ref=e62]
+              - text: Private
+        - button "Log Trip" [ref=e63]
+  - alert [ref=e64]

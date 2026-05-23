@@ -123,7 +123,7 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
             onSelect={(result) => {
               setEndPointFromSearch({ lat: result.lat, lon: result.lon, displayName: result.displayName });
             }}
-            placeholder="Search destination address..."
+            placeholder="Search street address..."
           />
           <input name="endLocation" type="hidden" value={endLocation} />
         </div>

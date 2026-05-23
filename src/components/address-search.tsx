@@ -81,7 +81,7 @@ export function AddressSearch({ value, onChange, onSelect, placeholder, disabled
         type="text"
         value={query}
         onChange={handleInputChange}
-        placeholder={placeholder || "Search address..."}
+        placeholder={placeholder || "Search street address..."}
         disabled={disabled}
         className="w-full border rounded px-3 py-2 disabled:bg-gray-100"
       />

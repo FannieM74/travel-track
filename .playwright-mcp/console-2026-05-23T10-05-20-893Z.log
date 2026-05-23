@@ -1,0 +1,11 @@
+[   36376ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2477
+[   36507ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2477
+[   36532ms] [ERROR] %c%s%c [31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3318
+[   36533ms] [ERROR] %c%s%c     at assertConfig (/home/morema/travel-tracking/.next/dev/server/chunks/ssr/node_modules_@auth_core_11i.8sa._.js:513:16)
+    at Auth (/home/morema/travel-tracking/.next/dev/server/chunks/ssr/node_modules_@auth_core_11i.8sa._.js:5344:202)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7) background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3318
+[   42492ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=DrLxYso-o_deNwNRDpOr0' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13322
+[   43494ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=DrLxYso-o_deNwNRDpOr0' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13322
+[   44495ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=DrLxYso-o_deNwNRDpOr0' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13322

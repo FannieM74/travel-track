@@ -68,7 +68,11 @@ export function MapPicker({ onRouteChange, endPointFromSearch }: MapPickerProps)
         } else if (!endRef.current) {
           const marker = L.marker([lat, lon]).addTo(map).bindPopup("End");
           markers.current.push(marker);
-          map.setView([lat, lon], 15);
+          if (startRef.current) {
+            map.fitBounds(L.latLngBounds([startRef.current!.lat, startRef.current!.lon], [lat, lon]), { padding: [50, 50] });
+          } else {
+            map.setView([lat, lon], 15);
+          }
 
           const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
           const data = await res.json();
@@ -136,7 +140,11 @@ export function MapPicker({ onRouteChange, endPointFromSearch }: MapPickerProps)
 
       const marker = L.marker([lat, lon]).addTo(mapInstance.current).bindPopup("End");
       markers.current.push(marker);
-      mapInstance.current.setView([lat, lon], 15);
+      if (startRef.current) {
+        mapInstance.current.fitBounds(L.latLngBounds([startRef.current!.lat, startRef.current!.lon], [lat, lon]), { padding: [50, 50] });
+      } else {
+        mapInstance.current.setView([lat, lon], 15);
+      }
 
       endRef.current = { lat, lon };
       endNameRef.current = displayName;
