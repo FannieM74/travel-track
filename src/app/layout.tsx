@@ -36,7 +36,7 @@ export default async function RootLayout({
           <nav className="border-b px-4 md:px-6 py-3 flex items-center justify-between">
             <a href="/" className="font-bold text-lg">TravelTrack</a>
             {session?.user ? (
-              <NavMenu user={session.user} />
+              <NavMenu userEmail={session.user?.email} />
             ) : (
               <a href="/auth/login" className="text-sm hover:underline">Sign In</a>
             )}

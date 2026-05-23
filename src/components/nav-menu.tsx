@@ -1,26 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
-export default function NavMenu({ user }: { user: { email: string } | null }) {
+export default function NavMenu({ userEmail }: { userEmail?: string | null }) {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
 
-  const navLinks = user
-    ? [
-        { href: "/dashboard", label: "Dashboard" },
-        { href: "/trips", label: "Trips" },
-        { href: "/vehicles", label: "Vehicles" },
-        { href: "/reports", label: "Reports" },
-      ]
-    : [];
-
-  const rightLinks = user
-    ? [
-        { href: "/api/auth/signout", label: "Sign out", red: true },
-      ]
-    : [{ href: "/auth/login", label: "Sign In" }];
+  const navLinks = [
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/trips", label: "Trips" },
+    { href: "/vehicles", label: "Vehicles" },
+    { href: "/reports", label: "Reports" },
+  ];
 
   return (
     <>
@@ -57,22 +47,15 @@ export default function NavMenu({ user }: { user: { email: string } | null }) {
               {link.label}
             </a>
           ))}
-          {user && (
-            <span className="text-sm text-gray-500 hidden md:inline">{user.email}</span>
-          )}
-          {rightLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className={`text-sm hover:underline py-2 md:py-0 ${link.red ? "text-red-600" : ""}`}
-            >
-              {link.label}
-            </a>
-          ))}
-          {user && (
-            <span className="text-sm text-gray-500 border-t pt-4 mt-2 md:hidden">{user.email}</span>
-          )}
+          <span className="text-sm text-gray-500 hidden md:inline">{userEmail}</span>
+          <a
+            href="/api/auth/signout"
+            onClick={() => setOpen(false)}
+            className="text-sm text-red-600 hover:underline py-2 md:py-0"
+          >
+            Sign out
+          </a>
+          <span className="text-sm text-gray-500 border-t pt-4 mt-2 md:hidden">{userEmail}</span>
         </div>
       </div>
     </>
