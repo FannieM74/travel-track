@@ -1,0 +1,27 @@
+import { NextResponse } from "next/server";
+
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const lat = url.searchParams.get("lat");
+  const lon = url.searchParams.get("lon");
+
+  if (!lat || !lon) {
+    return NextResponse.json({ error: "Missing lat or lon" }, { status: 400 });
+  }
+
+  const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`;
+  const res = await fetch(nominatimUrl, {
+    headers: { "User-Agent": "TravelTrack/1.0 (travel-track-app)" },
+  });
+  const data = await res.json();
+
+  if (!data || data.error) {
+    return NextResponse.json({ name: `${lat}, ${lon}` });
+  }
+
+  const addr = data.address || {};
+  const name = addr.suburb || addr.city_district || addr.city || addr.town || addr.village || addr.county || addr.state || `${lat}, ${lon}`;
+  const fullName = [addr.suburb, addr.city || addr.town || addr.village].filter(Boolean).join(", ") || name;
+
+  return NextResponse.json({ name: fullName });
+}

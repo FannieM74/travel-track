@@ -31,6 +31,8 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
   const [startLocation, setStartLocation] = useState(trip?.startLocation ?? "");
   const [endLocation, setEndLocation] = useState(trip?.endLocation ?? "");
   const [loading, setLoading] = useState(false);
+  const [calcLoading, setCalcLoading] = useState(false);
+  const [geoLoading, setGeoLoading] = useState(false);
   const startOdoRef = useRef(startOdometer);
   startOdoRef.current = startOdometer;
 
@@ -50,9 +52,15 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
   }, []);
 
   const handleRouteChange = useCallback(
-    (start: { lat: number; lon: number }, end: { lat: number; lon: number }, distanceKm: number) => {
-      setStartLocation(`${start.lat.toFixed(4)}, ${start.lon.toFixed(4)}`);
-      setEndLocation(`${end.lat.toFixed(4)}, ${end.lon.toFixed(4)}`);
+    (
+      start: { lat: number; lon: number },
+      end: { lat: number; lon: number },
+      distanceKm: number,
+      startName: string,
+      endName: string,
+    ) => {
+      setStartLocation(startName);
+      setEndLocation(endName);
       const odo = startOdoRef.current;
       if (odo) {
         setEndOdometer((parseInt(odo) + distanceKm).toString());
@@ -60,6 +68,55 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
     },
     [],
   );
+
+  async function handleMyLocation() {
+    if (!navigator.geolocation) return;
+    setGeoLoading(true);
+    try {
+      const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+        })
+      );
+      const { latitude: lat, longitude: lon } = pos.coords;
+      const res = await fetch(`/api/geocode/reverse?lat=${lat}&lon=${lon}`);
+      const data = await res.json();
+      setStartLocation(data.name);
+    } catch {
+      // denied or failed
+    } finally {
+      setGeoLoading(false);
+    }
+  }
+
+  async function handleCalculateDistance() {
+    if (!startLocation.trim() || !endLocation.trim()) return;
+    setCalcLoading(true);
+    try {
+      const [startRes, endRes] = await Promise.all([
+        fetch(`/api/geocode/search?q=${encodeURIComponent(startLocation)}`),
+        fetch(`/api/geocode/search?q=${encodeURIComponent(endLocation)}`),
+      ]);
+      if (!startRes.ok || !endRes.ok) return;
+      const startData = await startRes.json();
+      const endData = await endRes.json();
+
+      const osrmRes = await fetch(
+        `/api/osrm/route?startLon=${startData.lon}&startLat=${startData.lat}&endLon=${endData.lon}&endLat=${endData.lat}`
+      );
+      const osrmData = await osrmRes.json();
+      if (osrmData.code === "Ok" && osrmData.routes?.[0]) {
+        const distanceKm = Math.round(osrmData.routes[0].distance / 1000);
+        const odo = startOdoRef.current;
+        if (odo) {
+          setEndOdometer((parseInt(odo) + distanceKm).toString());
+        }
+      }
+    } finally {
+      setCalcLoading(false);
+    }
+  }
 
   return (
     <form action={trip ? updateTrip.bind(null, trip.id) : createTrip} className="space-y-4">
@@ -95,27 +152,47 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
         </div>
       </div>
 
-      {!trip && (
-        <div className="border rounded-lg p-4 bg-gray-50">
-          <label className="block text-sm font-medium mb-2">Pin on Map</label>
-          <MapPicker onRouteChange={handleRouteChange} />
-        </div>
-      )}
+      <div className="hidden md:block border rounded-lg p-4 bg-gray-50">
+        <label className="block text-sm font-medium mb-2">Pin on Map</label>
+        <MapPicker onRouteChange={handleRouteChange} />
+      </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Start Location</label>
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-sm font-medium">Start Location</label>
+            <button
+              type="button"
+              onClick={handleMyLocation}
+              disabled={geoLoading}
+              className="text-xs text-blue-600 hover:underline disabled:opacity-50"
+            >
+              {geoLoading ? "..." : "📍 Use my location"}
+            </button>
+          </div>
           <input name="startLocation" required value={startLocation}
             onChange={e => setStartLocation(e.target.value)}
-            className="w-full border rounded px-3 py-2" placeholder="Address or place name" />
+            className="w-full border rounded px-3 py-2" placeholder="Suburb or address" />
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">End Location</label>
           <input name="endLocation" required value={endLocation}
             onChange={e => setEndLocation(e.target.value)}
-            className="w-full border rounded px-3 py-2" placeholder="Address or place name" />
+            className="w-full border rounded px-3 py-2" placeholder="Suburb or address" />
         </div>
       </div>
+
+      {startLocation && endLocation && !trip && (
+        <button
+          type="button"
+          onClick={handleCalculateDistance}
+          disabled={calcLoading}
+          className="w-full border border-blue-300 text-blue-700 rounded py-2 hover:bg-blue-50 disabled:opacity-50"
+        >
+          {calcLoading ? "Calculating..." : "Calculate Distance"}
+        </button>
+      )}
+
       <div>
         <label className="block text-sm font-medium mb-1">Purpose of Trip</label>
         <textarea name="purpose" required defaultValue={trip?.purpose ?? ""}
