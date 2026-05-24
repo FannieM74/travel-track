@@ -28,9 +28,7 @@ export function MapPicker({ onRouteChange, onDistanceCalculated, endPointFromSea
   const prevSearchKeyRef = useRef<string | null>(null);
   const [startPoint, setStartPoint] = useState<{ lat: number; lon: number } | null>(null);
   const [endPoint, setEndPoint] = useState<{ lat: number; lon: number } | null>(null);
-  const [showAccept, setShowAccept] = useState(false);
   const [distanceKm, setDistanceKm] = useState(0);
-  const [routeAccepted, setRouteAccepted] = useState(false);
 
   async function updateStartAddress(lat: number, lon: number) {
     try {
@@ -55,7 +53,6 @@ export function MapPicker({ onRouteChange, onDistanceCalculated, endPointFromSea
 
       startRef.current = { lat: newLat, lon: newLon };
       setStartPoint({ lat: newLat, lon: newLon });
-      setRouteAccepted(false);
 
       await updateStartAddress(newLat, newLon);
 
@@ -91,7 +88,6 @@ export function MapPicker({ onRouteChange, onDistanceCalculated, endPointFromSea
         if (!startRef.current) {
           startRef.current = { lat, lon };
           setStartPoint({ lat, lon });
-          setRouteAccepted(false);
           map.setView([lat, lon], 15);
 
           createStartMarker(map, L, lat, lon);
@@ -111,8 +107,6 @@ export function MapPicker({ onRouteChange, onDistanceCalculated, endPointFromSea
 
           endRef.current = { lat, lon };
           setEndPoint({ lat, lon });
-          setShowAccept(false);
-          setRouteAccepted(false);
         }
       });
 
@@ -170,15 +164,12 @@ export function MapPicker({ onRouteChange, onDistanceCalculated, endPointFromSea
       endRef.current = { lat, lon };
       endNameRef.current = displayName;
       setEndPoint({ lat, lon });
-      setShowAccept(false);
-      setRouteAccepted(false);
     }
     placeEndMarker();
   }, [endPointFromSearch]);
 
   useEffect(() => {
     if (!startPoint || !endPoint) return;
-    setShowAccept(false);
 
     fetch(
       `/api/osrm/route?startLon=${startPoint.lon}&startLat=${startPoint.lat}&endLon=${endPoint.lon}&endLat=${endPoint.lat}`
@@ -194,25 +185,17 @@ export function MapPicker({ onRouteChange, onDistanceCalculated, endPointFromSea
           const distKm = Math.round(route.distance / 1000);
           routeDistanceRef.current = distKm;
           setDistanceKm(distKm);
-          setShowAccept(true);
           onDistanceCalculated?.(distKm);
+          onRouteChange(
+            startRef.current!,
+            endRef.current!,
+            distKm,
+            startNameRef.current,
+            endNameRef.current,
+          );
         }
       });
-  }, [startPoint, endPoint, onDistanceCalculated]);
-
-  function handleAccept() {
-    if (startRef.current && endRef.current) {
-      onRouteChange(
-        startRef.current,
-        endRef.current,
-        routeDistanceRef.current,
-        startNameRef.current,
-        endNameRef.current,
-      );
-      setRouteAccepted(true);
-      setShowAccept(false);
-    }
-  }
+  }, [startPoint, endPoint, onDistanceCalculated, onRouteChange]);
 
   function resetMap() {
     markers.current.forEach((m: any) => m.remove());
@@ -226,22 +209,16 @@ export function MapPicker({ onRouteChange, onDistanceCalculated, endPointFromSea
     prevSearchKeyRef.current = null;
     setStartPoint(null);
     setEndPoint(null);
-    setShowAccept(false);
-    setRouteAccepted(false);
     setDistanceKm(0);
   }
 
   return (
     <div className="space-y-2">
       <div ref={mapRef} className="h-80 w-full rounded-lg border" />
-      {showAccept && distanceKm > 0 && !routeAccepted && (
-        <button
-          type="button"
-          onClick={handleAccept}
-          className="w-full bg-green-600 text-white rounded py-2 hover:bg-green-700 font-medium"
-        >
-          Accept Route — {distanceKm} km
-        </button>
+      {distanceKm > 0 && (
+        <p className="text-sm text-fg-muted text-center py-1">
+          Trip distance: <span className="font-semibold text-fg">{distanceKm} km</span>
+        </p>
       )}
     </div>
   );
