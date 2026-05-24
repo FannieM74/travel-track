@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 
 export default function NavMenu({ userEmail }: { userEmail?: string | null }) {
   const [open, setOpen] = useState(false);
@@ -50,13 +51,15 @@ export default function NavMenu({ userEmail }: { userEmail?: string | null }) {
             </a>
           ))}
           <span className="text-sm hidden md:inline text-fg-secondary">{userEmail}</span>
-          <a
-            href="/api/auth/signout"
-            onClick={() => setOpen(false)}
-            className="text-sm hover:underline py-2 md:py-0 text-danger"
+          <button
+            onClick={() => {
+              setOpen(false);
+              signOut({ callbackUrl: "/" });
+            }}
+            className="text-sm hover:underline py-2 md:py-0 text-danger text-left"
           >
             Sign out
-          </a>
+          </button>
           <span className="text-sm border-t pt-4 mt-2 md:hidden text-fg-secondary" style={{ borderTopColor: "var(--line)" }}>{userEmail}</span>
         </div>
       </div>
