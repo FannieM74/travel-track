@@ -61,6 +61,9 @@ export function AddressSearch({ value, onChange, onSelect, placeholder, disabled
             setResults(data.results);
             setIsOpen(data.results.length > 0);
           }
+        } else {
+          setResults([]);
+          setIsOpen(false);
         }
       } catch {
       } finally {

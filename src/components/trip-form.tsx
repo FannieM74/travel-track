@@ -36,6 +36,7 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
   const [endPointFromSearch, setEndPointFromSearch] = useState<{ lat: number; lon: number; displayName: string } | null>(null);
   const startOdoRef = useRef(startOdometer);
   startOdoRef.current = startOdometer;
+  const distanceRef = useRef(0);
 
   const handleVehicleChange = useCallback(async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const vehicleId = e.target.value;
@@ -44,8 +45,13 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
     try {
       const last = await getLastOdometer(vehicleId);
       if (last) {
-        setStartOdometer(last.value.toString());
-        setEndOdometer("");
+        const newStart = last.value;
+        setStartOdometer(newStart.toString());
+        if (distanceRef.current > 0) {
+          setEndOdometer((newStart + distanceRef.current).toString());
+        } else {
+          setEndOdometer("");
+        }
       }
     } finally {
       setLoading(false);
@@ -60,6 +66,7 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
       startName: string,
       endName: string,
     ) => {
+      distanceRef.current = distanceKm;
       setStartLocation(startName);
       setEndLocation(endName);
       const odo = startOdoRef.current;
@@ -71,6 +78,7 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
   );
 
   const handleDistanceCalculated = useCallback((distanceKm: number) => {
+    distanceRef.current = distanceKm;
     const odo = startOdoRef.current;
     if (odo) {
       setEndOdometer((parseInt(odo) + distanceKm).toString());
