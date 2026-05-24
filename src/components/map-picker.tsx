@@ -10,11 +10,12 @@ interface MapPickerProps {
     startName: string,
     endName: string,
   ) => void;
+  onDistanceCalculated?: (distanceKm: number) => void;
   endPointFromSearch: { lat: number; lon: number; displayName: string } | null;
   onStartLocated?: (name: string) => void;
 }
 
-export function MapPicker({ onRouteChange, endPointFromSearch, onStartLocated }: MapPickerProps) {
+export function MapPicker({ onRouteChange, onDistanceCalculated, endPointFromSearch, onStartLocated }: MapPickerProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
   const markers = useRef<any[]>([]);
@@ -194,9 +195,10 @@ export function MapPicker({ onRouteChange, endPointFromSearch, onStartLocated }:
           routeDistanceRef.current = distKm;
           setDistanceKm(distKm);
           setShowAccept(true);
+          onDistanceCalculated?.(distKm);
         }
       });
-  }, [startPoint, endPoint]);
+  }, [startPoint, endPoint, onDistanceCalculated]);
 
   function handleAccept() {
     if (startRef.current && endRef.current) {

@@ -18,7 +18,7 @@ export async function createTrip(formData: FormData) {
   const endOdometer = parseInt(formData.get("endOdometer") as string);
   const startLocation = formData.get("startLocation") as string;
   const endLocation = formData.get("endLocation") as string;
-  const purpose = formData.get("purpose") as string;
+  const purpose = (formData.get("purpose") as string) || "Private trip";
   const isBusiness = formData.get("isBusiness") === "true";
 
   await db.insert(trips).values({
@@ -50,7 +50,7 @@ export async function updateTrip(id: string, formData: FormData) {
   const endOdometer = parseInt(formData.get("endOdometer") as string);
   const startLocation = formData.get("startLocation") as string;
   const endLocation = formData.get("endLocation") as string;
-  const purpose = formData.get("purpose") as string;
+  const purpose = (formData.get("purpose") as string) || "Private trip";
   const isBusiness = formData.get("isBusiness") === "true";
 
   await db.update(trips).set({

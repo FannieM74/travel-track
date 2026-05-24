@@ -32,6 +32,7 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
   const [startLocation, setStartLocation] = useState(trip?.startLocation ?? "");
   const [endLocation, setEndLocation] = useState(trip?.endLocation ?? "");
   const [loading, setLoading] = useState(false);
+  const [isBusiness, setIsBusiness] = useState(trip?.isBusiness ?? true);
   const [endPointFromSearch, setEndPointFromSearch] = useState<{ lat: number; lon: number; displayName: string } | null>(null);
   const startOdoRef = useRef(startOdometer);
   startOdoRef.current = startOdometer;
@@ -69,6 +70,13 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
     [],
   );
 
+  const handleDistanceCalculated = useCallback((distanceKm: number) => {
+    const odo = startOdoRef.current;
+    if (odo) {
+      setEndOdometer((parseInt(odo) + distanceKm).toString());
+    }
+  }, []);
+
   return (
     <form action={trip ? updateTrip.bind(null, trip.id) : createTrip} className="space-y-4">
       <div>
@@ -105,7 +113,7 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
 
       <div className="border border-line rounded-xl shadow-sm p-4 bg-panel">
         <label className="block text-sm font-medium mb-2 text-fg">Pin on Map</label>
-        <MapPicker onRouteChange={handleRouteChange} endPointFromSearch={endPointFromSearch} onStartLocated={setStartLocation} />
+        <MapPicker onRouteChange={handleRouteChange} onDistanceCalculated={handleDistanceCalculated} endPointFromSearch={endPointFromSearch} onStartLocated={setStartLocation} />
       </div>
 
       <div>
@@ -127,20 +135,24 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
         <input name="endLocation" type="hidden" value={endLocation} />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-1 text-fg">Purpose of Trip</label>
-        <textarea name="purpose" required defaultValue={trip?.purpose ?? ""}
-          className="w-full border border-line rounded px-3 py-2 bg-input text-fg" rows={2} placeholder="e.g. Client meeting in Cape Town" />
-      </div>
+      {isBusiness && (
+        <div>
+          <label className="block text-sm font-medium mb-1 text-fg">Purpose of Trip</label>
+          <textarea name="purpose" required={isBusiness} defaultValue={trip?.purpose ?? ""}
+            className="w-full border border-line rounded px-3 py-2 bg-input text-fg" rows={2} placeholder="e.g. Client meeting in Cape Town" />
+        </div>
+      )}
       <div>
         <label className="block text-sm font-medium mb-1 text-fg">Trip Type</label>
         <div className="flex gap-4">
           <label className="flex items-center gap-2 text-fg">
-            <input name="isBusiness" type="radio" value="true" defaultChecked={trip ? trip.isBusiness : true} />
+            <input name="isBusiness" type="radio" value="true" checked={isBusiness === true}
+              onChange={() => setIsBusiness(true)} />
             Business
           </label>
           <label className="flex items-center gap-2 text-fg">
-            <input name="isBusiness" type="radio" value="false" defaultChecked={trip ? !trip.isBusiness : false} />
+            <input name="isBusiness" type="radio" value="false" checked={isBusiness === false}
+              onChange={() => setIsBusiness(false)} />
             Private
           </label>
         </div>
