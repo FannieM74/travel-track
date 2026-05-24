@@ -8,6 +8,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -15,6 +16,10 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     setError("");
 
     if (mode === "register") {
+      if (password !== confirmPassword) {
+        setError("Passwords do not match");
+        return;
+      }
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,6 +68,16 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           required
           className="w-full border border-line rounded px-3 py-2 bg-input text-fg"
         />
+        {mode === "register" && (
+          <input
+            type="password"
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            className="w-full border border-line rounded px-3 py-2 bg-input text-fg"
+          />
+        )}
         {error && <p className="text-sm" style={{ color: "var(--danger)" }}>{error}</p>}
         <button
           type="submit"
