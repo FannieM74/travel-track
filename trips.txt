@@ -1,0 +1,72 @@
+- generic [active] [ref=e1] [box=0,0,967,900]:
+  - navigation [ref=e2] [box=0,0,967,61]:
+    - link "TravelTrack" [ref=e3] [cursor=pointer] [box=24,16,104,28]:
+      - /url: /
+    - generic [ref=e4] [box=429,12,514,36]:
+      - generic [ref=e6] [box=430,20,469,20]:
+        - link "Dashboard" [ref=e7] [cursor=pointer] [box=430,20,70,20]:
+          - /url: /dashboard
+        - link "Trips" [ref=e8] [cursor=pointer] [box=516,20,31,20]:
+          - /url: /trips
+        - link "Vehicles" [ref=e9] [cursor=pointer] [box=563,20,54,20]:
+          - /url: /vehicles
+        - link "Reports" [ref=e10] [cursor=pointer] [box=633,20,50,20]:
+          - /url: /reports
+        - generic [ref=e11] [box=699,20,131,20]: morema@gmail.com
+        - button "Sign out" [ref=e12] [box=846,20,53,20]
+      - button "Switch to dark mode" [ref=e13] [box=907,12,36,36]:
+        - img [ref=e14] [box=915,20,20,20]
+  - main [ref=e16] [box=0,61,967,839]:
+    - generic [ref=e17] [box=36,61,896,696]:
+      - generic [ref=e18] [box=60,85,848,40]:
+        - heading "Trips" [level=1] [ref=e19] [box=60,89,59,32]
+        - generic [ref=e20] [box=686,85,221,40]:
+          - link "Export CSV" [ref=e21] [cursor=pointer] [box=686,85,109,40]:
+            - /url: /api/trips/csv
+          - link "+ Log Trip" [ref=e22] [cursor=pointer] [box=803,85,105,40]:
+            - /url: /trips/new
+      - button "Filter trips (6 trips)" [ref=e24] [box=60,149,118,20]
+      - generic [ref=e25] [box=60,193,848,540]:
+        - link "President Kruger Street, 1501 → Maaga Street, Mamelodi, City of Tshwane Metropolitan Municipality, Gauteng, 0101, South Africa 2026-05-24 · 67 km · Private trip Private" [ref=e26] [cursor=pointer] [box=60,193,848,80]:
+          - /url: /trips/d955f2f1-10c7-4614-b5de-c8ef359a4d2c
+          - generic [ref=e27] [box=77,210,814,46]:
+            - generic [ref=e28] [box=77,210,743,46]:
+              - paragraph [ref=e29] [box=77,210,743,24]: President Kruger Street, 1501 → Maaga Street, Mamelodi, City of Tshwane Metropolitan Municipality, Gauteng, 0101, South Africa
+              - paragraph [ref=e30] [box=77,236,743,20]: 2026-05-24 · 67 km · Private trip
+            - generic [ref=e31] [box=831,210,59,24]: Private
+        - link "Benoni → Germiston 2026-05-23 · 39 km · Client meeting Business" [ref=e32] [cursor=pointer] [box=60,285,848,80]:
+          - /url: /trips/dfd04e5d-d9bc-4443-b9aa-e74f5470ace7
+          - generic [ref=e33] [box=77,302,814,46]:
+            - generic [ref=e34] [box=77,302,731,46]:
+              - paragraph [ref=e35] [box=77,302,731,24]: Benoni → Germiston
+              - paragraph [ref=e36] [box=77,328,731,20]: 2026-05-23 · 39 km · Client meeting
+            - generic [ref=e37] [box=819,302,71,24]: Business
+        - link "Ekurhuleni Ward 24, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1501, South Africa → Maaga Street, Mamelodi, City of Tshwane Metropolitan Municipality, Gauteng, 0101, South Africa 2026-05-23 · 68 km · Client meeting Business" [ref=e38] [cursor=pointer] [box=60,377,848,80]:
+          - /url: /trips/ad7a6bf8-bebc-4185-b355-e5e63032656f
+          - generic [ref=e39] [box=77,394,814,46]:
+            - generic [ref=e40] [box=77,394,731,46]:
+              - paragraph [ref=e41] [box=77,394,731,24]: Ekurhuleni Ward 24, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1501, South Africa → Maaga Street, Mamelodi, City of Tshwane Metropolitan Municipality, Gauteng, 0101, South Africa
+              - paragraph [ref=e42] [box=77,420,731,20]: 2026-05-23 · 68 km · Client meeting
+            - generic [ref=e43] [box=819,394,71,24]: Business
+        - link "City of Ekurhuleni Metropolitan Municipality, City of Ekurhuleni Metropolitan Municipality → East Rand Mall, Bental Road, Jansenpark, Ekurhuleni Ward 22, Boksburg, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1478, South Africa 2026-05-23 · 13 km · Private Private" [ref=e44] [cursor=pointer] [box=60,469,848,80]:
+          - /url: /trips/40a703bc-a14e-4b05-928d-54cb334f042d
+          - generic [ref=e45] [box=77,486,814,46]:
+            - generic [ref=e46] [box=77,486,743,46]:
+              - paragraph [ref=e47] [box=77,486,743,24]: City of Ekurhuleni Metropolitan Municipality, City of Ekurhuleni Metropolitan Municipality → East Rand Mall, Bental Road, Jansenpark, Ekurhuleni Ward 22, Boksburg, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1478, South Africa
+              - paragraph [ref=e48] [box=77,512,743,20]: 2026-05-23 · 13 km · Private
+            - generic [ref=e49] [box=831,486,59,24]: Private
+        - link "President Kruger Street, 1501 → Keswick Road, Knights, Ekurhuleni Ward 93, Germiston, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1401, South Africa 2026-05-23 · 21 km · Client meeting Business" [ref=e50] [cursor=pointer] [box=60,561,848,80]:
+          - /url: /trips/9254281d-f98e-42c2-9448-6c2fab60a709
+          - generic [ref=e51] [box=77,578,814,46]:
+            - generic [ref=e52] [box=77,578,731,46]:
+              - paragraph [ref=e53] [box=77,578,731,24]: President Kruger Street, 1501 → Keswick Road, Knights, Ekurhuleni Ward 93, Germiston, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1401, South Africa
+              - paragraph [ref=e54] [box=77,604,731,20]: 2026-05-23 · 21 km · Client meeting
+            - generic [ref=e55] [box=819,578,71,24]: Business
+        - link "President Kruger Street, 1501 → Keswick Road, Knights, Ekurhuleni Ward 93, Germiston, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1401, South Africa 2026-05-23 · 21 km · Private Private" [ref=e56] [cursor=pointer] [box=60,653,848,80]:
+          - /url: /trips/b8caf43c-4f98-4164-96e7-2411decc8ccb
+          - generic [ref=e57] [box=77,670,814,46]:
+            - generic [ref=e58] [box=77,670,743,46]:
+              - paragraph [ref=e59] [box=77,670,743,24]: President Kruger Street, 1501 → Keswick Road, Knights, Ekurhuleni Ward 93, Germiston, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1401, South Africa
+              - paragraph [ref=e60] [box=77,696,743,20]: 2026-05-23 · 21 km · Private
+            - generic [ref=e61] [box=831,670,59,24]: Private
+  - alert [ref=e62] [box=-1,-1,1,1]

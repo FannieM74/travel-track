@@ -1,0 +1,64 @@
+- generic [active] [ref=e1] [box=0,0,1905,1941]:
+  - navigation [ref=e2] [box=0,0,1905,61]:
+    - link "TravelTrack" [ref=e3] [cursor=pointer] [box=24,16,104,28]:
+      - /url: /
+    - generic [ref=e4] [box=1793,12,88,36]:
+      - link "Sign In" [ref=e5] [cursor=pointer] [box=1793,20,44,20]:
+        - /url: /auth/login
+      - button "Switch to dark mode" [ref=e6] [box=1845,12,36,36]:
+        - img [ref=e7] [box=1853,20,20,20]
+  - main [ref=e9] [box=0,61,1905,1880]:
+    - generic [ref=e10] [box=0,61,1905,1880]:
+      - generic [ref=e16] [box=617,173,672,532]:
+        - generic [ref=e17] [box=804,173,298,30]: 🇿🇦 Built for South African tax compliance
+        - heading "Your SARS-Compliant Travel Logbook" [level=1] [ref=e18] [box=617,227,672,150]:
+          - text: Your SARS-Compliant
+          - text: Travel Logbook
+        - paragraph [ref=e19] [box=665,393,576,98]: Track business trips, calculate tax deductions, and generate audit-ready reports. The simplest way for South African employees to manage their travel allowance.
+        - generic [ref=e20] [box=617,531,672,62]:
+          - link "Start Free Trial" [ref=e21] [cursor=pointer] [box=787,531,191,62]:
+            - /url: /auth/register
+          - link "Sign In" [ref=e22] [cursor=pointer] [box=994,531,124,62]:
+            - /url: /auth/login
+        - generic [ref=e23] [box=617,649,672,56]:
+          - generic [ref=e24] [box=639,649,117,56]:
+            - generic [ref=e25] [box=639,649,117,36]: 12 450+
+            - generic [ref=e26] [box=639,689,117,16]: Trips Logged
+          - generic [ref=e28] [box=885,649,142,56]:
+            - generic [ref=e29] [box=885,649,142,36]: R 2.3M
+            - generic [ref=e30] [box=885,689,142,16]: Deductions Tracked
+          - generic [ref=e32] [box=1156,649,110,56]:
+            - generic [ref=e33] [box=1156,649,110,36]: 98%
+            - generic [ref=e34] [box=1156,689,110,16]: SARS Compliant
+      - generic [ref=e35] [box=441,817,1024,462]:
+        - generic [ref=e36] [box=465,881,976,64]:
+          - paragraph [ref=e37] [box=465,881,976,20]: Everything you need
+          - heading "Built for hassle-free travel logging" [level=2] [ref=e38] [box=465,909,976,36]
+        - generic [ref=e39] [box=465,993,976,222]:
+          - generic [ref=e40] [box=465,993,309,222]:
+            - generic [ref=e42] [box=490,1026,44,44]: 📍
+            - heading "Map-Based Trip Logging" [level=3] [ref=e43] [box=490,1086,259,28]
+            - paragraph [ref=e44] [box=490,1122,259,68]: Pin start and end locations on the map. Get accurate route distances and auto-calculated odometer readings.
+          - generic [ref=e45] [box=798,993,309,222]:
+            - generic [ref=e47] [box=823,1026,44,44]: 🚗
+            - heading "Multi-Vehicle Support" [level=3] [ref=e48] [box=823,1086,259,28]
+            - paragraph [ref=e49] [box=823,1122,259,68]: Manage multiple vehicles with per-vehicle odometer histories. Switch between cars, bakkies, or fleet vehicles.
+          - generic [ref=e50] [box=1131,993,309,222]:
+            - generic [ref=e52] [box=1156,1026,44,44]: 📄
+            - heading "SARS-Ready Reports" [level=3] [ref=e53] [box=1156,1086,259,28]
+            - paragraph [ref=e54] [box=1156,1122,259,68]: Export per-tax-year logbooks with business vs private split and estimated deductible, ready for your tax return.
+      - generic [ref=e56] [box=665,1335,576,194]:
+        - generic [ref=e57] [box=665,1335,576,48]: “
+        - paragraph [ref=e58] [box=665,1377,576,88]: TravelTrack saved me hours at tax time. The automatic business/private split and SARS compliance check gave me real peace of mind during my audit. I wish I'd found it years ago.
+        - generic [ref=e59] [box=665,1485,576,44]:
+          - paragraph [ref=e60] [box=665,1485,576,24]: — Thandi M.
+          - paragraph [ref=e61] [box=665,1509,576,20]: Sales Representative, Cape Town
+      - generic [ref=e62] [box=0,1585,1905,288]:
+        - heading "Ready to simplify your travel logging?" [level=2] [ref=e63] [box=24,1649,1857,36]
+        - paragraph [ref=e64] [box=24,1697,1857,24]: Join hundreds of South African professionals. Free to get started.
+        - link "Get Started Free →" [ref=e65] [cursor=pointer] [box=839,1753,227,56]:
+          - /url: /auth/register
+      - generic [ref=e66] [box=0,1873,1905,68]:
+        - generic [ref=e67] [box=24,1897,251,20]: © 2026 TravelTrack. All rights reserved.
+        - generic [ref=e68] [box=1577,1897,304,20]: SARS-compliant travel logbook for South Africa
+  - alert [ref=e69] [box=-1,-1,1,1]

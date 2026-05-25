@@ -1,0 +1,165 @@
+- generic [active] [ref=e1] [box=0,0,967,1615]:
+  - navigation [ref=e2] [box=0,0,967,61]:
+    - link "TravelTrack" [ref=e3] [cursor=pointer] [box=24,16,104,28]:
+      - /url: /
+    - generic [ref=e4] [box=429,12,514,36]:
+      - generic [ref=e22] [box=430,20,469,20]:
+        - link "Dashboard" [ref=e23] [cursor=pointer] [box=430,20,70,20]:
+          - /url: /dashboard
+        - link "Trips" [ref=e24] [cursor=pointer] [box=516,20,31,20]:
+          - /url: /trips
+        - link "Vehicles" [ref=e25] [cursor=pointer] [box=563,20,54,20]:
+          - /url: /vehicles
+        - link "Reports" [ref=e26] [cursor=pointer] [box=633,20,50,20]:
+          - /url: /reports
+        - generic [ref=e27] [box=699,20,131,20]: morema@gmail.com
+        - button "Sign out" [ref=e28] [box=846,20,53,20]
+      - button "Switch to dark mode" [ref=e6] [box=907,12,36,36]:
+        - img [ref=e7] [box=915,20,20,20]
+  - main [ref=e9] [box=0,61,967,1554]:
+    - generic [ref=e29] [box=0,61,967,1554]:
+      - generic [ref=e30] [box=24,85,919,40]:
+        - heading "Dashboard" [level=1] [ref=e31] [box=24,89,128,32]
+        - link "+ Log Trip" [ref=e32] [cursor=pointer] [box=838,85,105,40]:
+          - /url: /trips/new
+      - paragraph [ref=e33] [box=24,149,919,20]: "Tax Year: 2026/2027"
+      - generic [ref=e34] [box=24,185,919,98]:
+        - generic [ref=e35] [box=24,185,218,98]:
+          - paragraph [ref=e36] [box=45,206,176,16]: Total Kilometres
+          - paragraph [ref=e37] [box=45,226,176,36]: 229km
+        - generic [ref=e38] [box=258,185,218,98]:
+          - paragraph [ref=e39] [box=279,206,176,16]: Business Kilometres
+          - paragraph [ref=e40] [box=279,226,176,36]: 128km
+        - generic [ref=e41] [box=492,185,218,98]:
+          - paragraph [ref=e42] [box=513,206,176,16]: Business Use
+          - paragraph [ref=e43] [box=513,226,176,36]: 55.9%
+        - generic [ref=e44] [box=725,185,218,98]:
+          - paragraph [ref=e45] [box=746,206,176,16]: Trips Logged
+          - paragraph [ref=e46] [box=746,226,176,36]: "6"
+      - generic [ref=e47] [box=24,307,919,98]:
+        - paragraph [ref=e48] [box=45,328,877,16]: Estimated Deduction (Scale of Costs)
+        - paragraph [ref=e49] [box=45,348,877,36]: R 44,279
+      - generic [ref=e50] [box=24,429,919,1036]:
+        - generic [ref=e51] [box=24,429,919,266]:
+          - heading "Monthly Distance (km)" [level=3] [ref=e52] [box=45,450,877,20]
+          - generic [ref=e53] [box=45,486,877,160]:
+            - generic [ref=e54] [box=45,486,66,160]:
+              - generic [ref=e56] [box=45,618,66,5]:
+                - 'generic "Private: 0 km" [ref=e57] [box=45,618,66,5]'
+                - 'generic "Business: 0 km" [box=45,623,66,0]'
+              - generic [ref=e58] [box=69,631,18,15]: Mar
+            - generic [ref=e59] [box=119,486,66,160]:
+              - generic [ref=e61] [box=119,618,66,5]:
+                - 'generic "Private: 0 km" [ref=e62] [box=119,618,66,5]'
+                - 'generic "Business: 0 km" [box=119,623,66,0]'
+              - generic [ref=e63] [box=144,631,16,15]: Apr
+            - generic [ref=e64] [box=193,486,66,160]:
+              - generic [ref=e66] [box=193,486,66,137]:
+                - 'generic "Private: 101 km" [ref=e67] [box=193,486,66,60]'
+                - 'generic "Business: 128 km" [ref=e68] [box=193,546,66,77]'
+              - generic [ref=e69] [box=216,631,19,15]: May
+            - generic [ref=e70] [box=266,486,66,160]:
+              - generic [ref=e72] [box=266,618,66,5]:
+                - 'generic "Private: 0 km" [ref=e73] [box=266,618,66,5]'
+                - 'generic "Business: 0 km" [box=266,623,66,0]'
+              - generic [ref=e74] [box=290,631,18,15]: Jun
+            - generic [ref=e75] [box=340,486,66,160]:
+              - generic [ref=e77] [box=340,618,66,5]:
+                - 'generic "Private: 0 km" [ref=e78] [box=340,618,66,5]'
+                - 'generic "Business: 0 km" [box=340,623,66,0]'
+              - generic [ref=e79] [box=366,631,14,15]: Jul
+            - generic [ref=e80] [box=414,486,66,160]:
+              - generic [ref=e82] [box=414,618,66,5]:
+                - 'generic "Private: 0 km" [ref=e83] [box=414,618,66,5]'
+                - 'generic "Business: 0 km" [box=414,623,66,0]'
+              - generic [ref=e84] [box=438,631,18,15]: Aug
+            - generic [ref=e85] [box=488,486,66,160]:
+              - generic [ref=e87] [box=488,618,66,5]:
+                - 'generic "Private: 0 km" [ref=e88] [box=488,618,66,5]'
+                - 'generic "Business: 0 km" [box=488,623,66,0]'
+              - generic [ref=e89] [box=511,631,18,15]: Sep
+            - generic [ref=e90] [box=561,486,66,160]:
+              - generic [ref=e92] [box=561,618,66,5]:
+                - 'generic "Private: 0 km" [ref=e93] [box=561,618,66,5]'
+                - 'generic "Business: 0 km" [box=561,623,66,0]'
+              - generic [ref=e94] [box=586,631,17,15]: Oct
+            - generic [ref=e95] [box=635,486,66,160]:
+              - generic [ref=e97] [box=635,618,66,5]:
+                - 'generic "Private: 0 km" [ref=e98] [box=635,618,66,5]'
+                - 'generic "Business: 0 km" [box=635,623,66,0]'
+              - generic [ref=e99] [box=659,631,18,15]: Nov
+            - generic [ref=e100] [box=709,486,66,160]:
+              - generic [ref=e102] [box=709,618,66,5]:
+                - 'generic "Private: 0 km" [ref=e103] [box=709,618,66,5]'
+                - 'generic "Business: 0 km" [box=709,623,66,0]'
+              - generic [ref=e104] [box=733,631,18,15]: Dec
+            - generic [ref=e105] [box=783,486,66,160]:
+              - generic [ref=e107] [box=783,618,66,5]:
+                - 'generic "Private: 0 km" [ref=e108] [box=783,618,66,5]'
+                - 'generic "Business: 0 km" [box=783,623,66,0]'
+              - generic [ref=e109] [box=807,631,17,15]: Jan
+            - generic [ref=e110] [box=856,486,66,160]:
+              - generic [ref=e112] [box=856,618,66,5]:
+                - 'generic "Private: 0 km" [ref=e113] [box=856,618,66,5]'
+                - 'generic "Business: 0 km" [box=856,623,66,0]'
+              - generic [ref=e114] [box=881,631,17,15]: Feb
+          - generic [ref=e115] [box=45,658,877,16]:
+            - generic [ref=e116] [box=45,658,64,16]: Business
+            - generic [ref=e118] [box=125,658,52,16]: Private
+        - generic [ref=e120] [box=24,719,919,746]:
+          - heading "Recent Trips" [level=2] [ref=e121] [box=24,719,919,20]
+          - generic [ref=e122] [box=24,751,919,714]:
+            - 'link "24 May 2026 67 km Start: President Kruger Street, 1501 End: Maaga Street, Mamelodi, City of Tshwane Metropolitan Municipality, Gauteng, 0101, South Africa" [ref=e123] [cursor=pointer] [box=24,751,919,98]':
+              - /url: /trips/d955f2f1-10c7-4614-b5de-c8ef359a4d2c
+              - generic [ref=e124] [box=41,768,885,20]:
+                - generic [ref=e125] [box=41,768,86,20]: 24 May 2026
+                - generic [ref=e126] [box=886,768,40,20]: 67 km
+              - paragraph [ref=e127] [box=41,792,885,20]: "Start: President Kruger Street, 1501"
+              - paragraph [ref=e128] [box=41,812,885,20]: "End: Maaga Street, Mamelodi, City of Tshwane Metropolitan Municipality, Gauteng, 0101, South Africa"
+            - 'link "23 May 2026 39 km Start: Benoni End: Germiston Business: Client meeting" [ref=e129] [cursor=pointer] [box=24,857,919,120]':
+              - /url: /trips/dfd04e5d-d9bc-4443-b9aa-e74f5470ace7
+              - generic [ref=e130] [box=41,874,885,20]:
+                - generic [ref=e131] [box=41,874,86,20]: 23 May 2026
+                - generic [ref=e132] [box=884,874,42,20]: 39 km
+              - paragraph [ref=e133] [box=41,898,885,20]: "Start: Benoni"
+              - paragraph [ref=e134] [box=41,918,885,20]: "End: Germiston"
+              - paragraph [ref=e135] [box=41,940,885,20]: "Business: Client meeting"
+            - 'link "23 May 2026 68 km Start: Ekurhuleni Ward 24, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1501, South Africa End: Maaga Street, Mamelodi, City of Tshwane Metropolitan Municipality, Gauteng, 0101, South Africa Business: Client meeting" [ref=e136] [cursor=pointer] [box=24,985,919,120]':
+              - /url: /trips/ad7a6bf8-bebc-4185-b355-e5e63032656f
+              - generic [ref=e137] [box=41,1002,885,20]:
+                - generic [ref=e138] [box=41,1002,86,20]: 23 May 2026
+                - generic [ref=e139] [box=884,1002,42,20]: 68 km
+              - paragraph [ref=e140] [box=41,1026,885,20]: "Start: Ekurhuleni Ward 24, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1501, South Africa"
+              - paragraph [ref=e141] [box=41,1046,885,20]: "End: Maaga Street, Mamelodi, City of Tshwane Metropolitan Municipality, Gauteng, 0101, South Africa"
+              - paragraph [ref=e142] [box=41,1068,885,20]: "Business: Client meeting"
+            - 'link "23 May 2026 13 km Start: City of Ekurhuleni Metropolitan Municipality, City of Ekurhuleni Metropolitan Municipality End: East Rand Mall, Bental Road, Jansenpark, Ekurhuleni Ward 22, Boksburg, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1478, South Africa" [ref=e143] [cursor=pointer] [box=24,1113,919,118]':
+              - /url: /trips/40a703bc-a14e-4b05-928d-54cb334f042d
+              - generic [ref=e144] [box=41,1130,885,20]:
+                - generic [ref=e145] [box=41,1130,86,20]: 23 May 2026
+                - generic [ref=e146] [box=887,1130,39,20]: 13 km
+              - paragraph [ref=e147] [box=41,1154,885,20]: "Start: City of Ekurhuleni Metropolitan Municipality, City of Ekurhuleni Metropolitan Municipality"
+              - paragraph [ref=e148] [box=41,1174,885,40]: "End: East Rand Mall, Bental Road, Jansenpark, Ekurhuleni Ward 22, Boksburg, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1478, South Africa"
+            - 'link "23 May 2026 21 km Start: President Kruger Street, 1501 End: Keswick Road, Knights, Ekurhuleni Ward 93, Germiston, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1401, South Africa Business: Client meeting" [ref=e149] [cursor=pointer] [box=24,1239,919,120]':
+              - /url: /trips/9254281d-f98e-42c2-9448-6c2fab60a709
+              - generic [ref=e150] [box=41,1256,885,20]:
+                - generic [ref=e151] [box=41,1256,86,20]: 23 May 2026
+                - generic [ref=e152] [box=887,1256,39,20]: 21 km
+              - paragraph [ref=e153] [box=41,1280,885,20]: "Start: President Kruger Street, 1501"
+              - paragraph [ref=e154] [box=41,1300,885,20]: "End: Keswick Road, Knights, Ekurhuleni Ward 93, Germiston, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1401, South Africa"
+              - paragraph [ref=e155] [box=41,1322,885,20]: "Business: Client meeting"
+            - 'link "23 May 2026 21 km Start: President Kruger Street, 1501 End: Keswick Road, Knights, Ekurhuleni Ward 93, Germiston, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1401, South Africa" [ref=e156] [cursor=pointer] [box=24,1367,919,98]':
+              - /url: /trips/b8caf43c-4f98-4164-96e7-2411decc8ccb
+              - generic [ref=e157] [box=41,1384,885,20]:
+                - generic [ref=e158] [box=41,1384,86,20]: 23 May 2026
+                - generic [ref=e159] [box=887,1384,39,20]: 21 km
+              - paragraph [ref=e160] [box=41,1408,885,20]: "Start: President Kruger Street, 1501"
+              - paragraph [ref=e161] [box=41,1428,885,20]: "End: Keswick Road, Knights, Ekurhuleni Ward 93, Germiston, City of Ekurhuleni Metropolitan Municipality, Gauteng, 1401, South Africa"
+      - heading "Vehicles" [level=2] [ref=e162] [box=24,1489,919,20]
+      - generic [ref=e163] [box=24,1521,919,70]:
+        - generic [ref=e164] [box=24,1521,454,70]:
+          - paragraph [ref=e165] [box=37,1534,428,24]: BMW X5 (2010)
+          - paragraph [ref=e166] [box=37,1558,428,20]: BW 33 ZN GP
+        - generic [ref=e167] [box=490,1521,454,70]:
+          - paragraph [ref=e168] [box=503,1534,428,24]: Mercedes Benz C180 (2010)
+          - paragraph [ref=e169] [box=503,1558,428,20]: RND 721 GP
+  - alert [ref=e20] [box=-1,-1,1,1]

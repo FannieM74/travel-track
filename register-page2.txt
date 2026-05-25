@@ -1,0 +1,23 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link "TravelTrack" [ref=e3] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e4]:
+      - link "Sign In" [ref=e5] [cursor=pointer]:
+        - /url: /auth/login
+      - button "Switch to dark mode" [ref=e6]:
+        - img [ref=e7]
+  - main [ref=e9]:
+    - generic [ref=e10]:
+      - heading "Create Account" [level=1] [ref=e11]
+      - generic [ref=e12]:
+        - textbox "Email" [ref=e13]: morema@gmail.com
+        - textbox "Password" [ref=e14]: Morema@09
+        - textbox "Confirm password" [ref=e15]
+        - button "Create Account" [ref=e16]
+      - button "Sign in with Google" [ref=e18]
+      - paragraph [ref=e19]:
+        - text: Already have an account?
+        - link "Sign in" [ref=e20] [cursor=pointer]:
+          - /url: /auth/login
+  - alert [ref=e21]

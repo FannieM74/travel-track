@@ -43,6 +43,8 @@ export const trips = pgTable("trips", {
   endLocation: text("end_location").notNull(),
   purpose: text("purpose").notNull(),
   routePolyline: text("route_polyline"),
+  startOdometerPhoto: text("start_odometer_photo"),
+  endOdometerPhoto: text("end_odometer_photo"),
   isBusiness: boolean("is_business").default(true).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

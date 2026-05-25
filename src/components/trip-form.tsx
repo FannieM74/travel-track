@@ -5,6 +5,7 @@ import { createTrip, updateTrip } from "@/actions/trips";
 import { getLastOdometer } from "@/actions/odometer";
 import { MapPicker } from "./map-picker";
 import { AddressSearch } from "./address-search";
+import OdometerScanner from "./odometer-scanner";
 
 interface Vehicle {
   id: string;
@@ -34,6 +35,8 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
   const [loading, setLoading] = useState(false);
   const [isBusiness, setIsBusiness] = useState(trip?.isBusiness ?? true);
   const [endPointFromSearch, setEndPointFromSearch] = useState<{ lat: number; lon: number; displayName: string } | null>(null);
+  const [startOdoPhoto, setStartOdoPhoto] = useState("");
+  const [endOdoPhoto, setEndOdoPhoto] = useState("");
   const startOdoRef = useRef(startOdometer);
   startOdoRef.current = startOdometer;
   const distanceRef = useRef(0);
@@ -85,6 +88,16 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
     }
   }, []);
 
+  const handleScanStart = useCallback((reading: number, photo: string) => {
+    setStartOdometer(reading.toString());
+    setStartOdoPhoto(photo);
+  }, []);
+
+  const handleScanEnd = useCallback((reading: number, photo: string) => {
+    setEndOdometer(reading.toString());
+    setEndOdoPhoto(photo);
+  }, []);
+
   return (
     <form action={trip ? updateTrip.bind(null, trip.id) : createTrip} className="space-y-4">
       <div>
@@ -106,18 +119,26 @@ export function TripForm({ vehicles, trip }: { vehicles: Vehicle[]; trip?: TripD
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium mb-1 text-fg">Start Odometer (km)</label>
-          <input name="startOdometer" type="number" required value={startOdometer}
-            onChange={e => setStartOdometer(e.target.value)}
-            className="w-full border border-line rounded px-3 py-2 bg-input text-fg" />
+          <div className="flex gap-2 items-start">
+            <input name="startOdometer" type="number" required value={startOdometer}
+              onChange={e => setStartOdometer(e.target.value)}
+              className="flex-1 border border-line rounded px-3 py-2 bg-input text-fg" />
+            <OdometerScanner onScan={handleScanStart} label="Scan Start Odometer" />
+          </div>
           {loading && <span className="text-xs text-fg-muted">Loading last reading...</span>}
         </div>
         <div>
           <label className="block text-sm font-medium mb-1 text-fg">End Odometer (km)</label>
-          <input name="endOdometer" type="number" required value={endOdometer}
-            onChange={e => setEndOdometer(e.target.value)}
-            className="w-full border border-line rounded px-3 py-2 bg-input text-fg" />
+          <div className="flex gap-2 items-start">
+            <input name="endOdometer" type="number" required value={endOdometer}
+              onChange={e => setEndOdometer(e.target.value)}
+              className="flex-1 border border-line rounded px-3 py-2 bg-input text-fg" />
+            <OdometerScanner onScan={handleScanEnd} label="Scan End Odometer" />
+          </div>
         </div>
       </div>
+      <input name="startOdometerPhoto" type="hidden" value={startOdoPhoto} />
+      <input name="endOdometerPhoto" type="hidden" value={endOdoPhoto} />
 
       <div className="border border-line rounded-xl shadow-sm p-4 bg-panel">
         <label className="block text-sm font-medium mb-2 text-fg">Pin on Map</label>

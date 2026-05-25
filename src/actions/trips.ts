@@ -20,6 +20,8 @@ export async function createTrip(formData: FormData) {
   const endLocation = formData.get("endLocation") as string;
   const purpose = (formData.get("purpose") as string) || "Private trip";
   const isBusiness = formData.get("isBusiness") === "true";
+  const startOdometerPhoto = formData.get("startOdometerPhoto") as string | null;
+  const endOdometerPhoto = formData.get("endOdometerPhoto") as string | null;
 
   await db.insert(trips).values({
     userId: session.user.id,
@@ -33,6 +35,8 @@ export async function createTrip(formData: FormData) {
     endLocation,
     purpose,
     isBusiness,
+    startOdometerPhoto: startOdometerPhoto || null,
+    endOdometerPhoto: endOdometerPhoto || null,
   });
 
   revalidatePath("/trips");
@@ -52,6 +56,8 @@ export async function updateTrip(id: string, formData: FormData) {
   const endLocation = formData.get("endLocation") as string;
   const purpose = (formData.get("purpose") as string) || "Private trip";
   const isBusiness = formData.get("isBusiness") === "true";
+  const startOdometerPhoto = formData.get("startOdometerPhoto") as string | null;
+  const endOdometerPhoto = formData.get("endOdometerPhoto") as string | null;
 
   await db.update(trips).set({
     date,
@@ -64,6 +70,8 @@ export async function updateTrip(id: string, formData: FormData) {
     endLocation,
     purpose,
     isBusiness,
+    startOdometerPhoto: startOdometerPhoto || null,
+    endOdometerPhoto: endOdometerPhoto || null,
   }).where(and(eq(trips.id, id), eq(trips.userId, session.user.id)));
 
   revalidatePath("/trips");
